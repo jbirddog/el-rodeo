@@ -1,0 +1,11 @@
+services:
+  spiffworkflow-tests:
+    build:
+      context: src/sartography/SpiffWorkflow
+      dockerfile: ../../../docker/sartography/SpiffWorkflow/tests.Dockerfile
+      target: tests
+  spiffworkflow-tests-par:
+    build:
+      context: src/sartography/SpiffWorkflow
+      dockerfile: ../../../docker/sartography/SpiffWorkflow/tests.Dockerfile
+      target: tests-par
