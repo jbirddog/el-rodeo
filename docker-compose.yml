@@ -3,9 +3,13 @@ services:
     build:
       context: src/sartography/SpiffWorkflow
       dockerfile: ../../../docker/sartography/SpiffWorkflow/tests.Dockerfile
+      tags:
+        - "spiffworkflow-tests"
       target: tests
   spiffworkflow-tests-par:
     build:
       context: src/sartography/SpiffWorkflow
       dockerfile: ../../../docker/sartography/SpiffWorkflow/tests.Dockerfile
+      tags:
+        - "spiffworkflow-tests"
       target: tests-par
