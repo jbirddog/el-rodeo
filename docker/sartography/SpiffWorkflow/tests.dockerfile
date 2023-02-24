@@ -1,5 +1,7 @@
 FROM python:alpine AS base
 
+RUN apk add -U make
+
 WORKDIR /app
 
 COPY requirements.txt setup.py README.md .
