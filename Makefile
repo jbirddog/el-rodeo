@@ -1,14 +1,18 @@
 .PHONY : spiffworkflow-tests
 spiffworkflow-tests:
-	docker compose \
-		-f docker/sartography/SpiffWorkflow/docker-compose.yml \
-		build spiffworkflow-tests
+	docker build \
+		-f docker/sartography/SpiffWorkflow/tests.Dockerfile \
+		-t spiffworkflow-tests \
+		--target tests \
+		../../sartography/SpiffWorkflow
 
 .PHONY : spiffworkflow-tests-par
 spiffworkflow-tests-par:
-	docker compose \
-		-f docker/sartography/SpiffWorkflow/docker-compose.yml \
-		build spiffworkflow-tests-par
+	docker build \
+		-f docker/sartography/SpiffWorkflow/tests.Dockerfile \
+		-t spiffworkflow-tests \
+		--target tests-par \
+		../../sartography/SpiffWorkflow
 
 .PHONY : spiffworkflow-backend-deps
 spiffworkflow-backend-deps:

@@ -5,8 +5,8 @@ RUN apk add -U make
 WORKDIR /app
 
 COPY requirements.txt setup.py README.md .
-RUN pip3 install -r requirements.txt
-RUN pip3 install unittest-parallel
+RUN pip install -r requirements.txt
+RUN pip install unittest-parallel
 
 COPY SpiffWorkflow/ SpiffWorkflow/
 COPY doc/ doc/
