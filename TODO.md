@@ -1,7 +1,7 @@
 ## Braindump TODOs
 
+* Move away from submodules, no need to have a second copy of the code
 * Rename top level `docker` folder to something like `local`
-* Can backend drop `orjson`? If so revisit alpine
 * Worth trying to install backend with just one DB driver?
 * Move away from poetry in containers
 * Run jobs in Makefile with clean env 
