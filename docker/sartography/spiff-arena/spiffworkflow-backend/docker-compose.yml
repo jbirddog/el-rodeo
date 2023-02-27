@@ -1,18 +1,18 @@
 services:
-  spiffworkflow-backend-dev:
-    build:
-      context: src/sartography/spiff-arena/spiffworkflow-backend
-      dockerfile: ../../../../docker/sartography/spiff-arena/spiffworkflow-backend/Dockerfile
-      tags:
-        - "spiffworkflow-backend-dev"
+  #spiffworkflow-backend-dev:
+  #  build:
+  #    context: src/sartography/spiff-arena/spiffworkflow-backend
+  #    dockerfile: ../../../../docker/sartography/spiff-arena/spiffworkflow-backend/Dockerfile
+  #    tags:
+  #      - "spiffworkflow-backend-dev"
+  #    args:
+  #      FLASK_APP: "/app/src/spiffworkflow_backend"
   spiffworkflow-backend-sqlite-dev:
     container_name: spiffworkflow-backend-sqlite-dev
     image: spiffworkflow-backend-dev
-    depends_on:
-      - spiffworkflow-backend-dev
     environment:
       FLASK_APP: "/app/src/spiffworkflow_backend"
-      FLASK_DEBUG: "0"
+      FLASK_DEBUG: "1"
       FLASK_RUN_PORT: "${SPIFF_BACKEND_PORT:-8000}"
       FLASK_SESSION_SECRET_KEY: "${FLASK_SESSION_SECRET_KEY:-super_secret_key}"
       SPIFFWORKFLOW_BACKEND_APPLICATION_ROOT: "/"
@@ -22,7 +22,7 @@ services:
 
       SPIFFWORKFLOW_BACKEND_BPMN_SPEC_ABSOLUTE_DIR: "/app/process_models"
       SPIFFWORKFLOW_BACKEND_CONNECTOR_PROXY_URL: "http://spiffworkflow-connector:8004"
-      SPIFFWORKFLOW_BACKEND_DATABASE_URI: "sqlite:////app/db/local_development.sqlite3"
+      #SPIFFWORKFLOW_BACKEND_DATABASE_URI: "sqlite:////app/db/db_local_development.sqlite3"
       SPIFFWORKFLOW_BACKEND_DATABASE_TYPE: "sqlite"
       SPIFFWORKFLOW_BACKEND_LOAD_FIXTURE_DATA: "false"
       SPIFFWORKFLOW_BACKEND_OPEN_ID_CLIENT_ID: "spiffworkflow-backend"
@@ -36,9 +36,10 @@ services:
     ports:
       - "${SPIFF_BACKEND_PORT:-8000}:${SPIFF_BACKEND_PORT:-8000}/tcp"
     volumes:
-      - ../../../../db:/app/db
-      - ../../../../log:/app/log
+      - ../../../../docker/sartography/spiff-arena/spiffworkflow-backend/bin:/app/bin
       - ../../../../process-models:/app/process_models
+      - ../../../../src/sartography/spiff-arena/spiffworkflow-backend/migrations:/app/migrations
+      - ../../../../src/sartography/spiff-arena/spiffworkflow-backend/src:/app/src
     healthcheck:
       test: "curl localhost:${SPIFF_BACKEND_PORT:-8000}/v1.0/status --fail"
       interval: 10s
