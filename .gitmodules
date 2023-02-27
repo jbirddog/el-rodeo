@@ -1,9 +1,3 @@
-[submodule "process-models/sartography/sample-process-models"]
-	path = process-models/sartography/sample-process-models
-	url = git@github.com:sartography/sample-process-models.git
-[submodule "process-models/jbirddog/process-models"]
-	path = process-models/jbirddog/process-models
-	url = git@github.com:jbirddog/process-models.git
 [submodule "src/sartography/spiff-arena"]
 	path = src/sartography/spiff-arena
 	url = git@github.com:sartography/spiff-arena.git
