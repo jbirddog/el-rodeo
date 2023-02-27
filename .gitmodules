@@ -7,6 +7,3 @@
 [submodule "src/sartography/spiff-arena"]
 	path = src/sartography/spiff-arena
 	url = git@github.com:sartography/spiff-arena.git
-[submodule "src/sartography/SpiffWorkflow"]
-	path = src/sartography/SpiffWorkflow
-	url = git@github.com:sartography/SpiffWorkflow.git
