@@ -1,12 +1,49 @@
 services:
   spiffworkflow-frontend:
     container_name: spiffworkflow-frontend
-    image: ghcr.io/sartography/spiffworkflow-frontend:main-latest
-    #depends_on:
-    #  spiffworkflow-backend:
-    #    condition: service_healthy
+    image: ghcr.io/sartography/spiffworkflow-frontend:latest
+    depends_on:
+      - spiffworkflow-backend
     environment:
       APPLICATION_ROOT: "/"
       PORT0: "${SPIFFWORKFLOW_FRONTEND_PORT:-8001}"
     ports:
       - "${SPIFFWORKFLOW_FRONTEND_PORT:-8001}:${SPIFFWORKFLOW_FRONTEND_PORT:-8001}/tcp"
+
+  spiffworkflow-backend:
+    container_name: spiffworkflow-backend
+    image: spiffworkflow-backend-dev
+    environment:
+      FLASK_APP: "/app/src/spiffworkflow_backend"
+      FLASK_DEBUG: "1"
+      FLASK_RUN_PORT: "${SPIFF_BACKEND_PORT:-8000}"
+      FLASK_SESSION_SECRET_KEY: "${FLASK_SESSION_SECRET_KEY:-super_secret_key}"
+      SPIFFWORKFLOW_BACKEND_APPLICATION_ROOT: "/"
+      SPIFFWORKFLOW_BACKEND_ENV: "local_development"
+      # WARNING: Frontend is a static site which assumes frontend port - 1 on localhost.
+      SPIFFWORKFLOW_BACKEND_URL: "http://localhost:${SPIFF_BACKEND_PORT:-8000}"
+
+      SPIFFWORKFLOW_BACKEND_BPMN_SPEC_ABSOLUTE_DIR: "/app/process_models"
+      SPIFFWORKFLOW_BACKEND_CONNECTOR_PROXY_URL: "http://spiffworkflow-connector:8004"
+      #SPIFFWORKFLOW_BACKEND_DATABASE_URI: "sqlite:////app/db/db_local_development.sqlite3"
+      SPIFFWORKFLOW_BACKEND_DATABASE_TYPE: "sqlite"
+      SPIFFWORKFLOW_BACKEND_LOAD_FIXTURE_DATA: "false"
+      SPIFFWORKFLOW_BACKEND_OPEN_ID_CLIENT_ID: "spiffworkflow-backend"
+      SPIFFWORKFLOW_BACKEND_OPEN_ID_CLIENT_SECRET_KEY: "my_open_id_secret_key"
+      SPIFFWORKFLOW_BACKEND_OPEN_ID_SERVER_URL: "http://localhost:${SPIFF_BACKEND_PORT:-8000}/openid"
+      SPIFFWORKFLOW_BACKEND_PERMISSIONS_FILE_NAME: "example.yml"
+      SPIFFWORKFLOW_BACKEND_PORT: "${SPIFF_BACKEND_PORT:-8000}"
+      SPIFFWORKFLOW_BACKEND_RUN_BACKGROUND_SCHEDULER: "false"
+      SPIFFWORKFLOW_BACKEND_UPGRADE_DB: "true"
+      SPIFFWORKFLOW_BACKEND_URL_FOR_FRONTEND: "http://localhost:${SPIFFWORKFLOW_FRONTEND_PORT:-8001}"
+    ports:
+      - "${SPIFF_BACKEND_PORT:-8000}:${SPIFF_BACKEND_PORT:-8000}/tcp"
+    volumes:
+      - ./sartography/spiff-arena/spiffworkflow-backend/bin:/app/bin
+      - ../../sartography/sample-process-models:/app/process_models
+      - ../../sartography/spiff-arena/spiffworkflow-backend/migrations:/app/migrations
+      - ../../sartography/spiff-arena/spiffworkflow-backend/src:/app/src
+
+volumes:
+  spiffworkflow-backend:
+    driver: local

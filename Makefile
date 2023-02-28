@@ -40,9 +40,15 @@ spiffworkflow-frontend-main-latest:
 		-f sartography/frontend/main-latest.docker-compose.yml \
 		up
 
+.PHONY : stop-testing
+stop-testing:
+	docker stop spiffworkflow-frontend
+	docker stop spiffworkflow-backend
+
 .PHONY : testing
-testing:
+testing: stop-testing
 	docker compose \
 		-f docker-compose.yml \
+		-f sartography/frontend/main-latest.docker-compose.yml \
 		-f sartography/spiff-arena/spiffworkflow-backend/docker-compose.yml \
 		up -d
