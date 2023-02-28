@@ -42,13 +42,16 @@ spiffworkflow-frontend-main-latest:
 
 .PHONY : stop-testing
 stop-testing:
-	docker stop spiffworkflow-frontend
-	docker stop spiffworkflow-backend
+	docker compose \
+		-f docker-compose.yml \
+		-f sartography/frontend/main-latest.docker-compose.yml \
+		-f sartography/backend/sqlite.docker-compose.yml \
+		down
 
 .PHONY : testing
 testing: stop-testing
 	docker compose \
 		-f docker-compose.yml \
 		-f sartography/frontend/main-latest.docker-compose.yml \
-		-f sartography/spiff-arena/spiffworkflow-backend/docker-compose.yml \
+		-f sartography/backend/sqlite.docker-compose.yml \
 		up -d

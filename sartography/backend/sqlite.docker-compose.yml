@@ -1,0 +1,8 @@
+services:
+  spiffworkflow-backend:
+    environment:
+      SPIFFWORKFLOW_BACKEND_DATABASE_TYPE: "sqlite"
+      # TODO: i'd like to specify this but don't know how it works with tests yet
+      #SPIFFWORKFLOW_BACKEND_DATABASE_URI: "sqlite:////app/db/db_local_development.sqlite3"
+      # TODO: not sure if this is safe to default for sqlite. if so remove and keep in root
+      SPIFFWORKFLOW_BACKEND_UPGRADE_DB: "true"

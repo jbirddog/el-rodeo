@@ -11,9 +11,9 @@ services:
     ports:
       - "${SPIFFWORKFLOW_FRONTEND_PORT:-8001}:${SPIFFWORKFLOW_FRONTEND_PORT:-8001}/tcp"
 
-  # TODO: extract out the db/auth portions into separate overlay files
   spiffworkflow-backend:
     container_name: spiffworkflow-backend
+    # TODO: build with docker file?
     image: spiffworkflow-backend-dev
     environment:
       FLASK_APP: "/app/src/spiffworkflow_backend"
@@ -27,8 +27,6 @@ services:
 
       SPIFFWORKFLOW_BACKEND_BPMN_SPEC_ABSOLUTE_DIR: "/app/process_models"
       SPIFFWORKFLOW_BACKEND_CONNECTOR_PROXY_URL: "http://spiffworkflow-connector:8004"
-      #SPIFFWORKFLOW_BACKEND_DATABASE_URI: "sqlite:////app/db/db_local_development.sqlite3"
-      SPIFFWORKFLOW_BACKEND_DATABASE_TYPE: "sqlite"
       SPIFFWORKFLOW_BACKEND_LOAD_FIXTURE_DATA: "false"
       SPIFFWORKFLOW_BACKEND_OPEN_ID_CLIENT_ID: "spiffworkflow-backend"
       SPIFFWORKFLOW_BACKEND_OPEN_ID_CLIENT_SECRET_KEY: "my_open_id_secret_key"
@@ -36,11 +34,12 @@ services:
       SPIFFWORKFLOW_BACKEND_PERMISSIONS_FILE_NAME: "example.yml"
       SPIFFWORKFLOW_BACKEND_PORT: "${SPIFF_BACKEND_PORT:-8000}"
       SPIFFWORKFLOW_BACKEND_RUN_BACKGROUND_SCHEDULER: "false"
-      SPIFFWORKFLOW_BACKEND_UPGRADE_DB: "true"
+      ##SPIFFWORKFLOW_BACKEND_UPGRADE_DB: "true"
       SPIFFWORKFLOW_BACKEND_URL_FOR_FRONTEND: "http://localhost:${SPIFFWORKFLOW_FRONTEND_PORT:-8001}"
     ports:
       - "${SPIFF_BACKEND_PORT:-8000}:${SPIFF_BACKEND_PORT:-8000}/tcp"
     volumes:
+      # TODO: should this be copied as the last step once the script settles
       - ./sartography/spiff-arena/spiffworkflow-backend/bin:/app/bin
       - ../../sartography/sample-process-models:/app/process_models
       # TODO: I think for sqlite we don't want these migrations?
