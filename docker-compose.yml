@@ -1,4 +1,5 @@
 services:
+  # TODO: make the default here a volume based dev env like backend is
   spiffworkflow-frontend:
     container_name: spiffworkflow-frontend
     image: ghcr.io/sartography/spiffworkflow-frontend:latest
@@ -10,6 +11,7 @@ services:
     ports:
       - "${SPIFFWORKFLOW_FRONTEND_PORT:-8001}:${SPIFFWORKFLOW_FRONTEND_PORT:-8001}/tcp"
 
+  # TODO: extract out the db/auth portions into separate overlay files
   spiffworkflow-backend:
     container_name: spiffworkflow-backend
     image: spiffworkflow-backend-dev
@@ -41,6 +43,7 @@ services:
     volumes:
       - ./sartography/spiff-arena/spiffworkflow-backend/bin:/app/bin
       - ../../sartography/sample-process-models:/app/process_models
+      # TODO: I think for sqlite we don't want these migrations?
       - ../../sartography/spiff-arena/spiffworkflow-backend/migrations:/app/migrations
       - ../../sartography/spiff-arena/spiffworkflow-backend/src:/app/src
 
