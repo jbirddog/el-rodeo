@@ -35,3 +35,4 @@
    1. .ssh as volume
 1. volumes for arena/SpiffWorkflow
 1. run tests, ./bin/run_pyl
+1. logs
