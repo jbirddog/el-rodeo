@@ -38,4 +38,11 @@ spiffworkflow-backend-sqlite-dev: spiffworkflow-backend-dev
 spiffworkflow-frontend-main-latest:
 	docker compose \
 		-f sartography/frontend/main-latest.docker-compose.yml \
-		up spiffworkflow-frontend
+		up
+
+.PHONY : testing
+testing:
+	docker compose \
+		-f docker-compose.yml \
+		-f sartography/spiff-arena/spiffworkflow-backend/docker-compose.yml \
+		up -d

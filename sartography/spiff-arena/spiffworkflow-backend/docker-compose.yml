@@ -28,15 +28,15 @@ services:
     ports:
       - "${SPIFF_BACKEND_PORT:-8000}:${SPIFF_BACKEND_PORT:-8000}/tcp"
     volumes:
-      - ../../../sartography/spiff-arena/spiffworkflow-backend/bin:/app/bin
-      - ../../../../../sartograpgy/sample-process-models:/app/process_models
-      - ../../../../../sartography/spiff-arena/spiffworkflow-backend/migrations:/app/migrations
-      - ../../../../../sartography/spiff-arena/spiffworkflow-backend/src:/app/src
-    healthcheck:
-      test: "curl localhost:${SPIFF_BACKEND_PORT:-8000}/v1.0/status --fail"
-      interval: 10s
-      timeout: 5s
-      retries: 20
+      - ./sartography/spiff-arena/spiffworkflow-backend/bin:/app/bin
+      - ../../sartography/sample-process-models:/app/process_models
+      - ../../sartography/spiff-arena/spiffworkflow-backend/migrations:/app/migrations
+      - ../../sartography/spiff-arena/spiffworkflow-backend/src:/app/src
+    #healthcheck:
+    #  test: "curl localhost:${SPIFF_BACKEND_PORT:-8000}/v1.0/status --fail"
+    #  interval: 10s
+    #  timeout: 5s
+    #  retries: 20
 
 volumes:
   spiffworkflow-backend-sqlite-dev:
