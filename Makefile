@@ -33,3 +33,9 @@ spiffworkflow-backend-sqlite-dev: spiffworkflow-backend-dev
 	docker compose \
 		-f sartography/spiff-arena/spiffworkflow-backend/docker-compose.yml \
 		up --pull never spiffworkflow-backend-sqlite-dev
+
+.PHONY : spiffworklow-frontend-main-latest
+spiffworkflow-frontend-main-latest:
+	docker compose \
+		-f sartography/frontend/main-latest.docker-compose.yml \
+		up spiffworkflow-frontend
