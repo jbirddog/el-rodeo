@@ -1,12 +1,4 @@
 services:
-  #spiffworkflow-backend-dev:
-  #  build:
-  #    context: src/sartography/spiff-arena/spiffworkflow-backend
-  #    dockerfile: ../../../../docker/sartography/spiff-arena/spiffworkflow-backend/Dockerfile
-  #    tags:
-  #      - "spiffworkflow-backend-dev"
-  #    args:
-  #      FLASK_APP: "/app/src/spiffworkflow_backend"
   spiffworkflow-backend-sqlite-dev:
     container_name: spiffworkflow-backend-sqlite-dev
     image: spiffworkflow-backend-dev
@@ -36,10 +28,10 @@ services:
     ports:
       - "${SPIFF_BACKEND_PORT:-8000}:${SPIFF_BACKEND_PORT:-8000}/tcp"
     volumes:
-      - ../../../../docker/sartography/spiff-arena/spiffworkflow-backend/bin:/app/bin
-      - ../../../../process-models:/app/process_models
-      - ../../../../src/sartography/spiff-arena/spiffworkflow-backend/migrations:/app/migrations
-      - ../../../../src/sartography/spiff-arena/spiffworkflow-backend/src:/app/src
+      - ../../../sartography/spiff-arena/spiffworkflow-backend/bin:/app/bin
+      - ../../../../../sartograpgy/sample-process-models:/app/process_models
+      - ../../../../../sartography/spiff-arena/spiffworkflow-backend/migrations:/app/migrations
+      - ../../../../../sartography/spiff-arena/spiffworkflow-backend/src:/app/src
     healthcheck:
       test: "curl localhost:${SPIFF_BACKEND_PORT:-8000}/v1.0/status --fail"
       interval: 10s

@@ -1,6 +1,5 @@
 ## Braindump TODOs
 
-* Rename top level `docker` folder to something like `local`
 * Worth trying to install backend with just one DB driver?
 * Move away from poetry in containers
 * Revisit alpine for backend now that `orjson` is gone
