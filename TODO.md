@@ -1,7 +1,7 @@
 ## Braindump TODOs
 
 * Worth trying to install backend with just one DB driver?
-* Move away from poetry in containers
+* Move away from poetry in containers?
 * Revisit alpine for backend now that `orjson` is gone
 * Run jobs in Makefile with clean env + PATH 
   * How is env specified - /usr/bin/env vs .env
@@ -12,6 +12,7 @@
 
 1. Sqlite for the db
    1. look at building image with correct schema (move db actions from boot.sh to image)
+   1. how does this work with moving away from poetry in containers?
 1. No keycloak, same auth as getting started guide (done)
 1. src/tests as volumes (src done)
 1. El Rodeo version of bin as volume (done)
@@ -36,6 +37,7 @@
 1. alpine
    1. vim, git, gh, tmux
    1. .ssh as volume
+   1. emacs server/client instead?
 1. volumes for arena/SpiffWorkflow
 1. run tests, ./bin/run_pyl via other containers?
 1. view logs from other containers?
