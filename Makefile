@@ -43,6 +43,7 @@ stop-testing:
 		-f docker-compose.yml \
 		-f sartography/frontend/main-latest.docker-compose.yml \
 		-f sartography/backend/sqlite.docker-compose.yml \
+		-f sartography/connector-proxy-status-im/docker-compose.yml \
 		down
 
 .PHONY : testing
@@ -51,4 +52,5 @@ run-testing: stop-testing
 		-f docker-compose.yml \
 		-f sartography/frontend/main-latest.docker-compose.yml \
 		-f sartography/backend/sqlite.docker-compose.yml \
+		-f sartography/connector-proxy-status-im/docker-compose.yml \
 		up -d --build
