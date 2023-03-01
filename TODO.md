@@ -11,9 +11,7 @@
 ### Minimal backend dev image
 
 1. Sqlite for the db
-   1. v0 assume db exists from outside of El Rodeo (not ideal but done)
-   1. v1 look at building image with correct schema
-   1. migration issue blocking v1 reproduces outside of El Rodeo, needs rmall action
+   1. look at building image with correct schema (move db actions from boot.sh to image)
 1. No keycloak, same auth as getting started guide (done)
 1. src/tests as volumes (src done)
 1. El Rodeo version of bin as volume (done)
@@ -31,6 +29,7 @@
 
 1. docker-compose.yml to launch frontend lastest-main and local minimal backend (done)
 1. use root docker-compose.yml from getting started guide, provide overlays (done)
+1. split openid config into overlay
 
 ### Local Development image (where the typing happens) aka houston
 

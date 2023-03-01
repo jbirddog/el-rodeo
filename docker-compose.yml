@@ -40,8 +40,6 @@ services:
       # TODO: should this be copied as the last step once the script settles
       - ./sartography/backend/bin:/app/bin
       - ../../sartography/sample-process-models:/app/process_models
-      # TODO: I think for sqlite we don't want these migrations?
-      - ../../sartography/spiff-arena/spiffworkflow-backend/migrations:/app/migrations
       - ../../sartography/spiff-arena/spiffworkflow-backend/src:/app/src
 
 volumes:

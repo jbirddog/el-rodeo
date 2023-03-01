@@ -22,7 +22,7 @@ frontend-main-latest:
 		up spiffworkflow-frontend
 
 .PHONY : backend-sqlite
-backend-sqlite: stop-backend-sqlite
+backend-sqlite:
 	docker compose \
 		-f docker-compose.yml \
 		-f sartography/frontend/main-latest.docker-compose.yml \
