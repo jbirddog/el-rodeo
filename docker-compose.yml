@@ -33,13 +33,12 @@ services:
       SPIFFWORKFLOW_BACKEND_PERMISSIONS_FILE_NAME: "example.yml"
       SPIFFWORKFLOW_BACKEND_PORT: "${SPIFF_BACKEND_PORT:-8000}"
       SPIFFWORKFLOW_BACKEND_RUN_BACKGROUND_SCHEDULER: "false"
-      ##SPIFFWORKFLOW_BACKEND_UPGRADE_DB: "true"
       SPIFFWORKFLOW_BACKEND_URL_FOR_FRONTEND: "http://localhost:${SPIFFWORKFLOW_FRONTEND_PORT:-8001}"
     ports:
       - "${SPIFF_BACKEND_PORT:-8000}:${SPIFF_BACKEND_PORT:-8000}/tcp"
     volumes:
       # TODO: should this be copied as the last step once the script settles
-      - ./sartography/spiff-arena/spiffworkflow-backend/bin:/app/bin
+      - ./sartography/backend/bin:/app/bin
       - ../../sartography/sample-process-models:/app/process_models
       # TODO: I think for sqlite we don't want these migrations?
       - ../../sartography/spiff-arena/spiffworkflow-backend/migrations:/app/migrations

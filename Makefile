@@ -15,11 +15,21 @@ spiffworkflow-tests-par:
 		../../sartography/SpiffWorkflow
 
 .PHONY : spiffworklow-frontend-main-latest
-spiffworkflow-frontend-main-latest:
+frontend-main-latest:
 	docker compose \
+		-f docker-compose.yml \
 		-f sartography/frontend/main-latest.docker-compose.yml \
-		up
+		up spiffworkflow-frontend
 
+.PHONY : backend-sqlite
+backend-sqlite: stop-backend-sqlite
+	docker compose \
+		-f docker-compose.yml \
+		-f sartography/frontend/main-latest.docker-compose.yml \
+		-f sartography/backend/sqlite.docker-compose.yml \
+		up --build spiffworkflow-backend
+
+# TODO: rename these
 .PHONY : stop-testing
 stop-testing:
 	docker compose \
@@ -29,7 +39,7 @@ stop-testing:
 		down
 
 .PHONY : testing
-testing: stop-testing
+run-testing: stop-testing
 	docker compose \
 		-f docker-compose.yml \
 		-f sartography/frontend/main-latest.docker-compose.yml \

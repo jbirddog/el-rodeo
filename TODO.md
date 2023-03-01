@@ -17,6 +17,7 @@
 1. No keycloak, same auth as getting started guide (done)
 1. src/tests as volumes (src done)
 1. El Rodeo version of bin as volume (done)
+   1. Once things settle copy in bin
 1. Own permissions file?
 1. Need build target to run tests
 
