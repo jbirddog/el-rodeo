@@ -29,6 +29,13 @@ backend-sqlite:
 		-f sartography/backend/sqlite.docker-compose.yml \
 		up --build spiffworkflow-backend
 
+.PHONY : status-proxy
+status-proxy:
+	docker compose \
+		-f docker-compose.yml \
+		-f sartography/connector-proxy-status-im/docker-compose.yml \
+		up --build spiffworkflow-connector
+
 # TODO: rename these
 .PHONY : stop-testing
 stop-testing:

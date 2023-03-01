@@ -1,0 +1,17 @@
+services:
+  spiffworkflow-connector:
+    container_name: spiffworkflow-connector
+    build:
+      context: ../../sartography/connector-proxy-status-im
+      dockerfile: $PWD/sartography/connector-proxy-status-im/Dockerfile
+    environment:
+      FLASK_APP: "/app/app.py"
+      FLASK_DEBUG: "1"
+      FLASK_ENV: "development"
+      FLASK_RUN_PORT: "${CONNECTOR_PROXY_PORT}"
+      FLASK_SESSION_SECRET_KEY: "${FLASK_SESSION_SECRET_KEY}"
+    ports:
+      - "${CONNECTOR_PROXY_PORT}:${CONNECTOR_PROXY_PORT}/tcp"
+    volumes:
+      - ../../sartography/connector-proxy-status-im/connectors:/app/connectors
+

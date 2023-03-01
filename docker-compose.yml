@@ -18,7 +18,7 @@ services:
       FLASK_APP: "/app/src/spiffworkflow_backend"
       FLASK_DEBUG: "1"
       FLASK_RUN_PORT: "${SPIFFWORKFLOW_BACKEND_PORT}"
-      FLASK_SESSION_SECRET_KEY: "${FLASK_SESSION_SECRET_KEY:-super_secret_key}"
+      FLASK_SESSION_SECRET_KEY: "${FLASK_SESSION_SECRET_KEY}"
       SPIFFWORKFLOW_BACKEND_APPLICATION_ROOT: "/"
       SPIFFWORKFLOW_BACKEND_ENV: "local_development"
       # WARNING: Frontend is a static site which assumes frontend port - 1 on localhost.

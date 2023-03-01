@@ -13,8 +13,5 @@ COPY poetry.lock pyproject.toml .
 # Might as well install dev deps as well so we can run tests?
 RUN poetry install --without dev --no-root
 
-# Get from ARG
-#RUN mkdir -p local/instance
-
 # For now bin is expected as a volume
 CMD ["./bin/boot.sh"]

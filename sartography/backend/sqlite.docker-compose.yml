@@ -5,11 +5,6 @@ services:
         FLASK_INSTANCE_PATH: "/app/local/instance"
     environment:
       SPIFFWORKFLOW_BACKEND_DATABASE_TYPE: "sqlite"
-      # TODO: i'd like to specify this but don't know how it works with tests yet
-      #SPIFFWORKFLOW_BACKEND_DATABASE_URI: "sqlite:////app/db/db_local_development.sqlite3"
-      #
-      #   see FLASK_INSTANCE_PATH
-      #   - needs to be like /app/local/instance so the log file path would work
       #   - don't want this to be the default src/instance because we want src to be a volumne 
       #     but want the db prepped when the image is built. we can always copy the file out if
       #     needed
