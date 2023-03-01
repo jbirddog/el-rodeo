@@ -10,12 +10,8 @@ WORKDIR /app
 
 COPY poetry.lock pyproject.toml .
 
+# Might as well install dev deps as well so we can run tests?
 RUN poetry install --without dev --no-root
 
-COPY src/ src/
-COPY migrations/ migrations/
-COPY README.rst .
-
-RUN poetry install --only=root
-
-CMD poetry run flask run
+# For now bin is expected as a volume
+CMD ["./bin/boot.sh"]

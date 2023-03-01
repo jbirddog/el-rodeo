@@ -3,8 +3,6 @@ services:
   spiffworkflow-frontend:
     container_name: spiffworkflow-frontend
     image: ghcr.io/sartography/spiffworkflow-frontend:latest
-    depends_on:
-      - spiffworkflow-backend
     environment:
       APPLICATION_ROOT: "/"
       PORT0: "${SPIFFWORKFLOW_FRONTEND_PORT:-8001}"
@@ -13,8 +11,9 @@ services:
 
   spiffworkflow-backend:
     container_name: spiffworkflow-backend
-    # TODO: build with docker file?
-    image: spiffworkflow-backend-dev
+    build:
+      context: ../../sartography/spiff-arena/spiffworkflow-backend
+      dockerfile: $PWD/sartography/backend/Dockerfile
     environment:
       FLASK_APP: "/app/src/spiffworkflow_backend"
       FLASK_DEBUG: "1"
