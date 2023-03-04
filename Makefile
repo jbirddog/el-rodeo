@@ -36,6 +36,13 @@ status-proxy:
 		-f sartography/connector-proxy-status-im/docker-compose.yml \
 		up --build spiffworkflow-connector
 
+.PHONY : arena
+arena:
+	docker build \
+		-f sartography/arena/Dockerfile \
+		-t arena-dev \
+		../../sartography/spiff-arena
+
 # TODO: rename these
 .PHONY : stop-testing
 stop-testing:
