@@ -24,32 +24,8 @@ INSERT INTO secret (
   key, value, user_id, updated_at_in_seconds, created_at_in_seconds
 )
 VALUES (
-  "POSTGRES_DB",
-  "${POSTGRES_DB}",
-  1,
-  1677696294,
-  1677696294
-), (
-  "POSTGRES_USER",
-  "${POSTGRES_USER}",
-  1,
-  1677696294,
-  1677696294
-), (
-  "POSTGRES_PASSWORD",
-  "${POSTGRES_PASSWORD}",
-  1,
-  1677696294,
-  1677696294
-), (
-  "POSTGRES_HOST",
-  "postgres-db",
-  1,
-  1677696294,
-  1677696294
-), (
-  "POSTGRES_PORT",
-  "${POSTGRES_PORT}",
+  "POSTGRES_CONN",
+  "ZnNjAAJZhmTSOSy8GgSQSOPWbyhE/UYbUHN0YAmL6gQAcdmHGz1ly99sjJF16jljuRsnSd7L5WXgnz7uN7+UJWfmKaixjGpHVH2QkK0c3Zybkjgt1dNevy1MuBt3zPNelc0rqWP03IxybAxrol/VuU/YmXH3vTGGu0ls9Pn74Jk=",
   1,
   1677696294,
   1677696294
