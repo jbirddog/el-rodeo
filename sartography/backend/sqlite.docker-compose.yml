@@ -2,10 +2,10 @@ services:
   spiffworkflow-backend:
     build:
       args:
-        FLASK_INSTANCE_PATH: "/app/local/instance"
+        FLASK_INSTANCE_PATH: "$FLASK_INSTANCE_PATH"
     environment:
       SPIFFWORKFLOW_BACKEND_DATABASE_TYPE: "sqlite"
       #   - don't want this to be the default src/instance because we want src to be a volumne 
       #     but want the db prepped when the image is built. we can always copy the file out if
       #     needed
-      FLASK_INSTANCE_PATH: "/app/local/instance"
+      FLASK_INSTANCE_PATH: "$FLASK_INSTANCE_PATH"
