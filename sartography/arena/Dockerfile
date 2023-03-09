@@ -10,25 +10,23 @@ RUN apk add -U \
     postgresql-dev \
     postgresql-libs
 
-COPY poetry.lock pyproject.toml .
+COPY spiffworkflow-backend/poetry.lock \
+     spiffworkflow-backend/pyproject.toml \
+     .
 
 RUN poetry export \
     --without-hashes \
     -f requirements.txt \
     -o requirements.txt
 
-RUN pip install -r requirements.txt
-
-RUN poetry export \
-    -C spiffworkflow-backend \
-    --without-hashes \
-    -f requirements.txt \
-    -o requirements.txt
-    
-RUN pip install -r requirements.txt
+RUN pip install \
+    --no-cache-dir \
+    -r requirements.txt
 
 FROM python:alpine AS base
 
-COPY --from=build /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
+ARG sitepackages=/usr/local/lib/python3.11/site-packages
+COPY --from=build $sitepackages $sitepackages
 
 WORKDIR /app
+
