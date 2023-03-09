@@ -11,10 +11,10 @@ RUN apt-get update && \
 
 WORKDIR /app
 
-COPY poetry.lock pyproject.toml .
+COPY poetry.lock pyproject.toml README.rst .
 
 # Might as well install dev deps as well so we can run tests?
-RUN poetry install --without dev --no-root
+RUN poetry install --no-root
 
 ENV FLASK_INSTANCE_PATH=$FLASK_INSTANCE_PATH
 
