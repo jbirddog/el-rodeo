@@ -30,3 +30,8 @@ COPY --from=build $sitepackages $sitepackages
 
 WORKDIR /app
 
+# once the sqlite file is generated at build time, see if we can
+# copy less stuff. also watch out for the unit-test log file until
+# that is disabled. At runtime this will be wiped out by a volume
+COPY spiffworkflow-backend/ spiffworkflow-backend/
+
