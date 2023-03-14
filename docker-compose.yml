@@ -38,6 +38,11 @@ services:
       SPIFFWORKFLOW_BACKEND_ENGINE_STEP_DEFAULT_STRATEGY_WEB: "run_until_service_task"
       SPIFFWORKFLOW_BACKEND_LOG_LEVEL: "info"
       SPIFFWORKFLOW_BACKEND_BACKGROUND_SCHEDULER_POLLING_INTERVAL_IN_SECONDS: "10"
+      # TODO: move to a with sentry
+      #SPIFFWORKFLOW_BACKEND_SENTRY_PROFILING_ENABLED: "true"
+      #SPIFFWORKFLOW_BACKEND_SENTRY_PROJECT_SLUG: "spiffworkflow-backend"
+      #SPIFFWORKFLOW_BACKEND_SENTRY_ORGANIZATION_SLUG: "sartography"
+      #SPIFFWORKFLOW_BACKEND_SENTRY_DSN: "https://24f53617eb3a4c6292655fc1fbd3af00@o401361.ingest.sentry.io/4503966086529024"
 
       # Secrets - TODO update now that it is one conn str
       POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
@@ -47,7 +52,6 @@ services:
     ports:
       - "${SPIFFWORKFLOW_BACKEND_PORT}:${SPIFFWORKFLOW_BACKEND_PORT}/tcp"
     volumes:
-      # TODO: should this be copied as the last step once the script settles
       - ./sartography/backend/bin:/app/bin
       - ../../sartography/sample-process-models:/app/process_models
       - ../../sartography/spiff-arena/spiffworkflow-backend/src:/app/src
