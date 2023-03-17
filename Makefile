@@ -61,3 +61,11 @@ run-testing: stop-testing
 		-f sartography/backend/sqlite.docker-compose.yml \
 		-f sartography/connector-proxy-status-im/docker-compose.yml \
 		up -d --build
+
+.PHONY : backend-sh
+backend-sh:
+	docker exec -it spiffworkflow-backend /bin/bash
+
+.PHONY : backend-logs
+backend-logs:
+	docker logs -f spiffworkflow-backend
