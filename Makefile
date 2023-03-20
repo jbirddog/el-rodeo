@@ -21,6 +21,13 @@ frontend-main-latest:
 		-f sartography/frontend/main-latest.docker-compose.yml \
 		up spiffworkflow-frontend
 
+.PHONY : pull-spiffworklow-frontend-main-latest
+pull-frontend-main-latest:
+	docker compose \
+		-f docker-compose.yml \
+		-f sartography/frontend/main-latest.docker-compose.yml \
+		pull spiffworkflow-frontend
+
 .PHONY : backend-sqlite
 backend-sqlite:
 	docker compose \
