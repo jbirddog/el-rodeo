@@ -1,3 +1,5 @@
+ME := $(shell id -u):$(shell id -g)
+
 .PHONY : spiffworkflow-tests
 spiffworkflow-tests:
 	docker build \
@@ -53,7 +55,7 @@ arena:
 # TODO: rename these
 .PHONY : stop-testing
 stop-testing:
-	docker compose \
+	RUN_AS=$(ME) docker compose \
 		-f docker-compose.yml \
 		-f sartography/frontend/main-latest.docker-compose.yml \
 		-f sartography/backend/sqlite.docker-compose.yml \
@@ -62,7 +64,7 @@ stop-testing:
 
 .PHONY : testing
 run-testing: stop-testing
-	docker compose \
+	RUN_AS=$(ME) docker compose \
 		-f docker-compose.yml \
 		-f sartography/frontend/main-latest.docker-compose.yml \
 		-f sartography/backend/sqlite.docker-compose.yml \
