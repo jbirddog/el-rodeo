@@ -14,7 +14,7 @@ services:
     build:
       context: ../../sartography/spiff-arena/spiffworkflow-backend
       dockerfile: $PWD/sartography/backend/Dockerfile
-    user: "${RUN_AS}"
+    #user: "${RUN_AS}"
     environment:
       FLASK_APP: "/app/src/spiffworkflow_backend"
       FLASK_DEBUG: "1"
@@ -36,7 +36,7 @@ services:
       SPIFFWORKFLOW_BACKEND_RUN_BACKGROUND_SCHEDULER: "true"
       SPIFFWORKFLOW_BACKEND_URL_FOR_FRONTEND: "http://localhost:${SPIFFWORKFLOW_FRONTEND_PORT}"
       SPIFFWORKFLOW_BACKEND_ENGINE_STEP_DEFAULT_STRATEGY_BACKGROUND: "greedy"
-      SPIFFWORKFLOW_BACKEND_ENGINE_STEP_DEFAULT_STRATEGY_WEB: "run_until_service_task"
+      SPIFFWORKFLOW_BACKEND_ENGINE_STEP_DEFAULT_STRATEGY_WEB: "greedy" #"run_until_service_task"
       SPIFFWORKFLOW_BACKEND_LOG_LEVEL: "info"
       SPIFFWORKFLOW_BACKEND_BACKGROUND_SCHEDULER_POLLING_INTERVAL_IN_SECONDS: "10"
       SPIFFWORKFLOW_BACKEND_BACKGROUND_SCHEDULER_USER_INPUT_REQUIRED_POLLING_INTERVAL_IN_SECONDS: "120"
@@ -58,5 +58,6 @@ services:
     volumes:
       - ./sartography/backend/bin:/app/bin
       - ../process-models:/app/process_models
+      #- ../../sartography/sample-process-models:/app/process_models
       - ../../sartography/spiff-arena/spiffworkflow-backend/src:/app/src
       - ../../sartography/spiff-arena/spiffworkflow-backend/tests:/app/tests
