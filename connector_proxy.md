@@ -73,7 +73,7 @@ From the outset the high level design goals of the Connector Proxy, in no partic
 5. Allow for such logic to be implemented by those not intimately familiar with BPMN
 6. Allow for communication with pre-existing apis/sdks that may not be written in Python
 
-
+From these design goals a quick and dirty implementation was pushed that made each `connector` a separate "project" that was integrated into the larger connector proxy via local packages. All connectors were written in Python and things generally worked well for a single implementation. The downside was all the logic to form the generic  `/v1/{auths,commands}` and perform `/v1/do/` was tightly coupled in the implementation. Creating a second Connector Proxy would mean starting from scratch (or more likely copy/pasting). At this point `at danfunk ` created `spiffworkflow-proxy` which factored out the discovery and routing logic into a reusable blueprint.
 
 ## Current Integration
 
