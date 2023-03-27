@@ -6,7 +6,7 @@ A `Connector Proxy` provides discoverable endpoints that are designed for use by
 
 ## Discoverability
 
-The discoverability of the services provided by a Connector Proxy str driven from the following endpoints:
+The discoverability of the services provided by a Connector Proxy are driven from the following endpoints:
 
 | Endpoint | Use |
 |----|----|
@@ -62,7 +62,7 @@ This indicates that it can authenticate with `Xero` using `OAuth`.
 
 When a `Service Task` is executed by the back-end of `spiff-arena` an http post request is done to the `/v1/do` endpoint providing the `id` of the command along with a `json` payload containing all the evaluated parameters that were configured by the BPMN diagram author. The response from the Connector Proxy is then put into the workflow using the configured (or defaulted) response variable.
 
-## High Level Design Theory and Current Implementation
+## High Level Design Theory and Some History
 
 From the outset the high level design goals of the Connector Proxy, in no particular order, were:
 
@@ -73,8 +73,17 @@ From the outset the high level design goals of the Connector Proxy, in no partic
 5. Allow for such logic to be implemented by those not intimately familiar with BPMN
 6. Allow for communication with pre-existing apis/sdks that may not be written in Python
 
-From these design goals a quick and dirty implementation was pushed that made each `connector` a separate "project" that was integrated into the larger connector proxy via local packages. All connectors were written in Python and things generally worked well for a single implementation. The downside was all the logic to form the generic  `/v1/{auths,commands}` and perform `/v1/do/` was tightly coupled in the implementation. Creating a second Connector Proxy would mean starting from scratch (or more likely copy/pasting). At this point `at danfunk ` created `spiffworkflow-proxy` which factored out the discovery and routing logic into a reusable blueprint.
+From these design goals a quick and dirty implementation was pushed that made each `connector` a separate "project" that was integrated into the larger connector proxy via local packages. All connectors were written in Python and things generally worked well for a single implementation. The downside was all the logic to form the generic  `/v1/{auths,commands}` and perform `/v1/do/` was tightly coupled in the implementation. Creating a second Connector Proxy would mean starting from scratch (or more likely copy/pasting). At this point `at danfunk ` created `spiffworkflow-proxy` which factored out the discovery and routing logic into a reusable blueprint. Once this refactor was available several Connector Proxy implemenations emerged.
 
 ## Current Integration
 
-The back-end of `spiff-arena` can be configured to communicate with any single Connector Proxy by providing its url when the application starts.
+At time of writing `spiff-arena` can be configured to communicate with any Connector Proxy by providing its url when the application starts. Practically speaking this means either the demo proxy or a client specific connector proxy. To date this configuration parameter has worked very well. The front-end supports configuring connectors and the back-end makes the calls.
+
+## The Type Ahead Can of Worms
+
+A recent requirement called for allowing `User Task` forms to be configured with a widget to allow type ahead auto-completion.
+
+
+
+
+
