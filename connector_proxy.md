@@ -4,6 +4,8 @@
 
 A `Connector Proxy` provides discoverable endpoints that are designed for use by `Service Tasks` in BPMN diagrams which are authored and executed by `spiff-arena`. These endpoints provide a means to configure integrations to external systems. Some examples include talking to `BambooHR`, `Coin Gecko`, `Xero` - or even a PostgreSQL database managed outside of `spiff-arena`.
 
+## Discoverability
+
 The discoverability of the services provided by a Connector Proxy str driven from the following endpoints:
 
 | Endpoint | Use |
@@ -55,6 +57,23 @@ When logged in to `spiff-arena` with the appropriate permissions the `/v1/auths`
 ```
 
 This indicates that it can authenticate with `Xero` using `OAuth`.
+
+## Execution
+
+When a `Service Task` is executed by the back-end of `spiff-arena` an http post request is done to the `/v1/do` endpoint providing the `id` of the command along with a `json` payload containing all the evaluated parameters that were configured by the BPMN diagram author. The response from the Connector Proxy is then put into the workflow using the configured (or defaulted) response variable.
+
+## High Level Design Theory and Current Implementation
+
+From the outset the high level design goals of the Connector Proxy, in no particular order, were:
+
+1. Separate dependencies from `spiff-arena`
+2. Separate client specific integration/logic from `spiff-arena`
+3. Provide a uniform way for BPMN diagram authors to configure communicate to external systems
+4. Provide a back door by which required logic that was outside the pervue of pure workflow execution could be performed
+5. Allow for such logic to be implemented by those not intimately familiar with BPMN
+6. Allow for communication with pre-existing apis/sdks that may not be written in Python
+
+
 
 ## Current Integration
 
