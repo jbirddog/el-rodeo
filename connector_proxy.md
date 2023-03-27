@@ -68,8 +68,8 @@ From the outset the high level design goals of the Connector Proxy, in no partic
 
 1. Separate dependencies from `spiff-arena`
 2. Separate client specific integration/logic from `spiff-arena`
-3. Provide a uniform way for BPMN diagram authors to configure communicate to external systems
-4. Provide a back door by which required logic that was outside the pervue of pure workflow execution could be performed
+3. Provide a uniform way for BPMN diagram authors to configure communication to external systems
+4. Provide a back door by which required logic, that was outside the pervue of pure workflow execution, could be performed
 5. Allow for such logic to be implemented by those not intimately familiar with BPMN
 6. Allow for communication with pre-existing apis/sdks that may not be written in Python
 
