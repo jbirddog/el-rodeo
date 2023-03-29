@@ -57,7 +57,7 @@ services:
       - "${SPIFFWORKFLOW_BACKEND_PORT}:${SPIFFWORKFLOW_BACKEND_PORT}/tcp"
     volumes:
       - ./sartography/backend/bin:/app/bin
-      - ../process-models:/app/process_models
-      #- ../../sartography/sample-process-models:/app/process_models
+      #- ../process-models:/app/process_models
+      - ../../sartography/sample-process-models:/app/process_models
       - ../../sartography/spiff-arena/spiffworkflow-backend/src:/app/src
       - ../../sartography/spiff-arena/spiffworkflow-backend/tests:/app/tests
