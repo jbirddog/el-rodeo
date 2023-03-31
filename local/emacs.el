@@ -1,17 +1,13 @@
 (global-font-lock-mode -1)
 (menu-bar-mode -1)
 
-(defvar *anchor-dir*)
-
-(defun set-anchor-dir ()
-  (interactive)
-  (setq *anchor-dir* (expand-file-name default-directory)))
-
-(set-anchor-dir)
+(defun el-rodeo-git-cdup ()
+  "Returns the path required to cd up to the .git root"
+  (car (process-lines "git" "rev-parse" "--show-cdup")))
 
 (defun build-make-cmd (target)
   (interactive)
-  (format "make -C %s %s" *anchor-dir* target))
+  (format "make -C %s %s" (el-rodeo-git-cdup) target))
 
 (defun do-compile ()
   (interactive)
