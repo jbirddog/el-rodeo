@@ -6,17 +6,34 @@ This document outlines a set of progressive enhancements to the current strategy
 
 ## Current State of Execution
 
-Today SpiffArena has a sound execution environment for BPMN diagrams. For diagrams on the simpler side execution is very fast, often in the 10-100s of milliseconds range. Diagrams are primarily executed within a Flask request but can be handled by the background processor. Historically the backend processor was used to handle timers and messages but it can run any non human task. 
+Today SpiffArena has a sound execution environment for BPMN diagrams. For diagrams on the simpler side execution is very fast, often in the 10-100s of milliseconds range. Diagrams are primarily executed within a Flask request but can be handled by the background processor. Historically the background processor was used to handle timers and messages but it can run any non human task. 
 
-Since SpiffArena executes diagrams within Flask requests and from the background processor, parallel execution of separate workflows is provided. There is no support for parallel execution of tasks within a single workflow however (true even when Parallel Gateways are used). The Process Instance Queue ensures that only one thread has access to execute any given process instance at a time.
+Since SpiffArena executes diagrams within Flask requests and from the background processor, parallel execution of separate workflows is provided. There is no support for parallel execution of tasks within a single workflow however (true even when Parallel Gateways are used).
 
 The Flask app and the background processor can be configured to use different strategies when executing diagrams. Currently the "greedy" strategy is used which simply runs all non human tasks until either the workflow completes or a human task is encountered. When executing this way the entire workflow is loaded and the available steps are executed. The advantage to this is simplicity, the downside is a long running process will block the request until it completes. This is perceived as slowness by the user while they are waiting on information after they press the "Run" or "Submit" button. If the background processor encounters a long running process it will block the thread until completion which often means other jobs are not run in a timely fashion.
 
+## Enter the Interstitial Page
+
+With the concept of the "interstitial page" and the different execution straties for the Flask requests and background processor, we can configure Flask requests to "run until a Service Task" and have the background processor be "greedy". This is a step closer to the end goal, but:
+
+1. What if lots of things/a slow script happen before a Service Task?
+1. What if hundreds of processes are started and shift all long running work to the "greedy" background processor?
+
+With some progressive enhancements to the current execution model we can start to take steps to allevate these issues.
+
+## Progressive Enhancements
+
+_TODO: is there an order here?_
+
+### More fine grained execution strategies
+
+Currently the Flask app and background processor each have their own environment variable to set their diagram execution strategy. The current options are "greedy" or "run_until_service_task". These environment variables are defaults but nothing ever overrides them. It would be nice to have the ability to detect the appropriate execution strategy for a given set of tasks, perhaps at save/upload time. This could be done by inspecting the task tree. An example benefit here would be a simple diagram could be run "greedy" by the Flask app but a more complex diagram would created but offloaded to the background processor for execution.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
 _TODO: some more points to incorporate:_
 
-1. we have a sound execution environment today
-2. however - it was designed for serial execution of a single process instance
-3. background processor was only there for timers
 4. like other applications, the serial strategy could be the fastest
 5. no reason not to fall back to the current model if needed (transition or how it is)
 6. the agenda here could not have been addressed 9mo ago without 9mo work (individual task handling, run task)
