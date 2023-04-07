@@ -17,17 +17,19 @@ The Flask app and the background processor can be configured to use different st
 With the concept of the "interstitial page" and the different execution straties for the Flask requests and background processor, we can configure Flask requests to "run until a Service Task" and have the background processor be "greedy". This is a step closer to the end goal, but:
 
 1. What if lots of things/a slow script happen before a Service Task?
-1. What if hundreds of processes are started and shift all long running work to the "greedy" background processor?
+1. What if hundreds of processes are started and shift all long running work to the single "greedy" background processor?
 
 With some progressive enhancements to the current execution model we can start to take steps to allevate these issues.
 
 ## Progressive Enhancements
 
-_TODO: is there an order here?_
+### Introduce the Concept of Task Units
+
+At its basic form a "task unit" is any group of tasks that can be run together in isolation. A task unit could be comprised of other task units internally - for instance an entire workflow is a task unit. Each branch within a Parallel Gateway could be considered its own task unit, as could a Script+Service Task combination. Today the entire workflow is required to perform a single engine step. If we progressively identify task units that are smaller in scope than the entire workflow, we could load less into memory to perform a single step. The introduction of this concept will be key to many of the enhancements described below.
 
 ### More fine grained execution strategies
 
-Currently the Flask app and background processor each have their own environment variable to set their diagram execution strategy. The current options are "greedy" or "run_until_service_task". These environment variables are defaults but nothing ever overrides them. It would be nice to have the ability to detect the appropriate execution strategy for a given set of tasks, perhaps at save/upload time. This could be done by inspecting the task tree. An example benefit here would be a simple diagram could be run "greedy" by the Flask app but a more complex diagram would created but offloaded to the background processor for execution.
+Currently the Flask app and background processor each have their own environment variable to set their diagram execution strategy. The current options are "greedy" or "run_until_service_task". These environment variables are defaults but nothing ever overrides them. It would be nice to have the ability to detect the appropriate execution strategy for any given task unit. This could be done by inspecting the task tree (possibly as save/upload time). As task units become more granular this would allow for more specialized step execution.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
