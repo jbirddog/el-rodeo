@@ -14,7 +14,7 @@ _TODO: some more points to incorporate:_
 
 _END TODO_
 
-This document details an augmentation to the current strategy for the execution of BPMN diagrams. The execution environment is assumed to be [SpiffArena](https://github.com/sartography/spiff-arena) which leverages [SpiffWorkflow](https://github.com/sartography/SpiffWorkflow).
+This document details an augmentation to the current strategy for the execution of BPMN diagrams within [SpiffArena](https://github.com/sartography/spiff-arena) which leverages [SpiffWorkflow](https://github.com/sartography/SpiffWorkflow).
 
 It is believed that everything is as valid as it is today with regards to [the spec](https://www.omg.org/spec/BPMN/2.0/PDF) (namely chapter 13). If any caveats exist we assume that the absense of the `isImmediate` attribute on `Sequence Flows` means _false_. Further we also assume this is always absent (as it is today). With that we quote:
 
@@ -39,6 +39,12 @@ With the above assumption that the absense of the `isImmediate` attribute on `Se
 
 **It is important to note that these two items will serve as the basis for the rest of the document.**
 
-At the time of writing `SpiffArena` does execute `Activities` from separate models in parallel. This is handled by a combination of separate Flask requests and the background processor running separate process instances. Activities within a given process instance however are not run in parallel (this is true even for Parallel Gateways).
+At the time of writing `SpiffArena` does execute `Activities` from separate models in parallel. This is handled by a combination of separate Flask requests and the background processor running separate process instances. Activities within a given process instance however are not run in parallel (this is true even for Parallel Gateways). It does not lock all Activities while another Activity is executing as the spec seems to suggest. We plan to continue in this tradition going forward (at least initially) but this does raise an interesting conversation with regards to multi-process interactions such as DataStores.
 
-Historically this has proven acceptable with simplier, smaller workflows. The introduction of larger and more complex workflows such as the MVP process and PP{1,N} which require hundreds of tasks, nested `Call Activities` and numerous `Service Tasks` have shown the current execution model does not scale with the complexity of an individual process model. These long running instances manifest as long pauses in the UI - sometimes tens of seconds to minutes. Once more Activities are moved to the background processor the inital UI pause will subside but all processes will be serialized while they are processed by a single background thread. This can be midigated by adding more workers but the larger issues still exists - if a single process instance takes minutes to run it will hold a thread for the entire duration of its execution. This will result in the perception of slower processing of all process instances.
+Historically the current execution model has proven acceptable with simplier, smaller workflows - in fact they can complete in milliseconds on commonity hardware. The introduction of larger and more complex workflows such as the MVP process and PP{1,N} which require hundreds of tasks, nested `Call Activities` and numerous `Service Tasks` have shown the current execution model does not scale with the complexity of an individual process model. These long running instances manifest as long pauses in the UI - sometimes tens of seconds to minutes. 
+
+The first step to a solution is to move all task execution to the background processor and have the UI render the interstitial page. Once more Activities are moved to the background processor the inital UI pause will subside but all processes will be serialized while they are processed by a single background thread. This can be midigated by adding more workers but the larger issues still exists - if a single process instance takes minutes to run it will hold a thread for the entire duration of its execution. This will result in the perception of slower processing of all process instances. If a long running process instance is used by multiple users the entire system could be suseptible to a denial of service.
+
+It should be noted this problem is not isolated to just the background worker - it is just easier to see there in the current configuration.
+
+
