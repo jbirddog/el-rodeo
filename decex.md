@@ -17,7 +17,7 @@ _TODO: some more points to incorporate:_
 
 _END TODO_
 
-_TODO: the main angle here is besides a true parallel gateway nothing much changes with regards to the current execution. What is executed however is subject to change.
+_TODO: the main angle here is besides a true parallel gateway nothing much changes with regards to the current execution. What is executed however is subject to change._
 
 This document details an augmentation to the current strategy for the execution of BPMN diagrams within [SpiffArena](https://github.com/sartography/spiff-arena) which leverages [SpiffWorkflow](https://github.com/sartography/SpiffWorkflow).
 
