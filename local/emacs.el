@@ -9,6 +9,11 @@
   (interactive)
   (format "make -C %s %s" (el-rodeo-git-cdup) target))
 
+; TODO: get cmd from minibuffer if not passed in
+(defun do-make-cmd (cmd)
+  (interactive)
+  (async-shell-command (build-make-cmd cmd)))
+
 (defun do-compile ()
   (interactive)
   (async-shell-command (build-make-cmd "compile")))
@@ -21,6 +26,10 @@
   (interactive)
   (async-shell-command (build-make-cmd "fmt")))
 
+(defun do-start ()
+  (interactive)
+  (async-shell-command (build-make-cmd "start")))
+
 (defun do-tests ()
   (interactive)
   (async-shell-command (build-make-cmd "tests")))
@@ -28,4 +37,6 @@
 (global-set-key (kbd "C-c c") 'do-compile)
 (global-set-key (kbd "C-c d") 'do-dev-env)
 (global-set-key (kbd "C-c f") 'do-fmt)
+(global-set-key (kbd "C-c m") 'do-make-cmd)
+(global-set-key (kbd "C-c s") 'do-start)
 (global-set-key (kbd "C-c t") 'do-tests)

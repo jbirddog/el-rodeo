@@ -1,5 +1,9 @@
 ME := $(shell id -u):$(shell id -g)
 
+.PHONY: pull-images
+pull-images:
+	docker pull ghcr.io/sartography/spiffworkflow-frontend:main-latest
+
 .PHONY : spiffworkflow-tests
 spiffworkflow-tests:
 	docker build \
