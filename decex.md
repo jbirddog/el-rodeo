@@ -14,9 +14,9 @@ _TODO: some more points to incorporate:_
 
 _END TODO_
 
-This document details a multi-layered/faceted? strategy for the execution of BPMN diagrams. The execution environment is assumed to be [SpiffArena](https://github.com/sartography/spiff-arena) which leverages [SpiffWorkflow](https://github.com/sartography/SpiffWorkflow).
+This document details an augmentation to the current strategy for the execution of BPMN diagrams. The execution environment is assumed to be [SpiffArena](https://github.com/sartography/spiff-arena) which leverages [SpiffWorkflow](https://github.com/sartography/SpiffWorkflow).
 
-It is believed that everything is valid with regards to [the spec](https://www.omg.org/spec/BPMN/2.0/PDF) (namely chapter 13) - at least as much as it is currently. If any caveats exist we assume that the absense of the `isImmediate` attribute on `Sequence Flows` means _false_. Further we also assume this is always absent (as it is today). With that we quote:
+It is believed that everything is as valid as it is today with regards to [the spec](https://www.omg.org/spec/BPMN/2.0/PDF) (namely chapter 13). If any caveats exist we assume that the absense of the `isImmediate` attribute on `Sequence Flows` means _false_. Further we also assume this is always absent (as it is today). With that we quote:
 
 ```
 Token movement across a Sequence Flow does not have any timing constraints. A token might take a long or short time
@@ -32,16 +32,16 @@ For the sake of this document the above passage distills to the following quoted
 1. Token movement across a Sequence Flow does not have any timing constraints.
 2. If the isImmediate attribute of a Sequence Flow has a value of false, or has no value and is taken to mean false, then Activities not in the model MAY be executed while the token is moving along the Sequence Flow.
 
-With the assumption that the absense of the `isImmediate` attribute on `Sequence Flows` means _false_ we can further distill to our version:
+With the above assumption that the absense of the `isImmediate` attribute on `Sequence Flows` means _false_ we can further distill to our version:
 
 1. Token movement across a Sequence Flow does not have any timing constraints.
 2. Activities not in the model MAY be executed while the token is moving along the Sequence Flow.
 
-These two items will serve as the basis for the purposed execution model.
+**It is important to note that these two items will serve as the basis for the rest of the document.**
 
-Theoretically speaking this means that under the right circumstances many `Activities` can be executed in parallel.
+At the time of writing `SpiffArena` does execute `Activities` from separate models in parallel. This is handled by a combination of separate Flask requests and the background processor running separate process instances. Activities within a given process instance however are not run in parallel (this is true even for Parallel Gateways).
 
-At the time of writing `SpiffArena` does execute `Activities` from separate models in parallel. This is handled by a combination of separate Flask requests and the background processor running separate process instances. Activities within a given process instance however are not run in parallel.
+Historically this has proven acceptable with simplier, smaller workflows. The introduction of larger and more complex workflow such as the MVP process and PP_N_ which require hundreds of tasks, nested `Call Activities` and numerous `Service Tasks` have shown the current execution model does no scale with the complexity of an individual process model.
 
 ## What?
 
