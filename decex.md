@@ -1,8 +1,16 @@
 # On the Execution and Decomposition of BPMN Diagrams
 
-## Execution
-
 _TODO: this started off all about execution but I think its really going to be about decomposition with a true parallel gateway and maybe some other handling. If so maybe this is just a summary of why we can decompose to gain implicit parallel execution?_
+
+This document outlines a set of progressive enhancements to the current strategy for the execution of BPMN diagrams within [SpiffArena](https://github.com/sartography/spiff-arena) which leverages [SpiffWorkflow](https://github.com/sartography/SpiffWorkflow). The end goal is a more stable and performant system that is able to simulatenously execute multiple process instances ranging from small and simple to large and complex (such as MVP/PP1).
+
+## Current State of Execution
+
+Today SpiffArena has a sound execution environment for BPMN diagrams. For diagrams on the simpler side execution is very fast, often in the 10-100s of milliseconds range. Diagrams are primarily executed within a Flask request but can be handled by the background processor. Historically the backend processor was used to handle timers and messages but it can run any non human task. 
+
+Since SpiffArena executes diagrams within Flask requests and from the background processor, parallel execution of separate workflows is provided. There is no support for parallel execution of tasks within a single workflow however (true even when Parallel Gateways are used). The Process Instance Queue ensures that only one thread has access to execute any given process instance at a time.
+
+The Flask app and the background processor can be configured to use different strategies when executing diagrams. Currently the "greedy" strategy is used which simply runs all non human tasks until either the workflow completes or a human task is encountered. When executing this way the entire workflow is loaded and the available steps are executed. The advantage to this is simplicity, the downside is a long running process will block the request until it completes. This is perceived as slowness by the user while they are waiting on information after they press the "Run" or "Submit" button. If the background processor encounters a long running process it will block the thread until completion which often means other jobs are not run in a timely fashion.
 
 _TODO: some more points to incorporate:_
 
@@ -18,8 +26,6 @@ _TODO: some more points to incorporate:_
 _END TODO_
 
 _TODO: the main angle here is besides a true parallel gateway nothing much changes with regards to the current execution. What is executed however is subject to change._
-
-This document details an augmentation to the current strategy for the execution of BPMN diagrams within [SpiffArena](https://github.com/sartography/spiff-arena) which leverages [SpiffWorkflow](https://github.com/sartography/SpiffWorkflow).
 
 It is believed that everything is as valid as it is today with regards to [the spec](https://www.omg.org/spec/BPMN/2.0/PDF) (namely chapter 13). If any caveats exist we assume that the absense of the `isImmediate` attribute on `Sequence Flows` means _false_. Further we also assume this is always absent (as it is today). With that we quote:
 
