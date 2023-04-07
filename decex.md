@@ -41,7 +41,7 @@ With the above assumption that the absense of the `isImmediate` attribute on `Se
 
 At the time of writing `SpiffArena` does execute `Activities` from separate models in parallel. This is handled by a combination of separate Flask requests and the background processor running separate process instances. Activities within a given process instance however are not run in parallel (this is true even for Parallel Gateways).
 
-Historically this has proven acceptable with simplier, smaller workflows. The introduction of larger and more complex workflow such as the MVP process and PP_N_ which require hundreds of tasks, nested `Call Activities` and numerous `Service Tasks` have shown the current execution model does no scale with the complexity of an individual process model.
+Historically this has proven acceptable with simplier, smaller workflows. The introduction of larger and more complex workflow such as the MVP process and PP{1,N} which require hundreds of tasks, nested `Call Activities` and numerous `Service Tasks` have shown the current execution model does not scale with the complexity of an individual process model.
 
 ## What?
 
