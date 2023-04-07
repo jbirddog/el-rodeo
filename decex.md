@@ -4,6 +4,16 @@
 
 _TODO: this started off all about execution but I think its really going to be about decomposition with a true parallel gateway and maybe some other handling. If so maybe this is just a summary of why we can decompose to gain implicit parallel execution?_
 
+_TODO: some more points to incorporate:_
+
+1. we have a sound execution environment today
+2. however - it was designed for serial execution of a single process instance
+3. background processor was only there for timers
+4. like other applications, the serial strategy could be the fastest
+5. no reason not to fall back to the current model if needed (transition or how it is)
+
+_END TODO_
+
 This document details a multi-layered/faceted? strategy for the execution of BPMN diagrams. The execution environment is assumed to be [SpiffArena](https://github.com/sartography/spiff-arena) which leverages [SpiffWorkflow](https://github.com/sartography/SpiffWorkflow).
 
 It is believed that everything is valid with regards to [the spec](https://www.omg.org/spec/BPMN/2.0/PDF) (namely chapter 13) - at least as much as it is currently. If any caveats exist we assume that the absense of the `isImmediate` attribute on `Sequence Flows` means _false_. Further we also assume this is always absent (as it is today). With that we quote:
