@@ -27,12 +27,12 @@ taken to mean true, then Activities not in the model MAY NOT be executed while t
 Sequence Flow.
 ```
 
-For the sake of this document the above passage distills to the following points:
+For the sake of this document the above passage distills to the following quoted points:
 
 1. Token movement across a Sequence Flow does not have any timing constraints.
 2. If the isImmediate attribute of a Sequence Flow has a value of false, or has no value and is taken to mean false, then Activities not in the model MAY be executed while the token is moving along the Sequence Flow.
 
-With the assumption that the absense of the `isImmediate` attribute on `Sequence Flows` means _false_ we can further distill to:
+With the assumption that the absense of the `isImmediate` attribute on `Sequence Flows` means _false_ we can further distill to our version:
 
 1. Token movement across a Sequence Flow does not have any timing constraints.
 2. Activities not in the model MAY be executed while the token is moving along the Sequence Flow.
