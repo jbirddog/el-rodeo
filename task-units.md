@@ -25,25 +25,43 @@ With some progressive enhancements to the current execution model we can start t
 
 Core to these progressive enhancements are the concept of "Task Units". Task units are any grouping of tasks that can be run together in isolation. Task units can be formed from other task units or may be a single task. How task units are formed from decomposing diagrams and how this promotes efficient parallel execution will be described in more detail below.
 
-Since an entire workflow is itself a task unit, the enhancements described below can be worked on iteratively
+Since an entire workflow is itself a task unit, the enhancements described below can be worked on iteratively. As task units become more granular the effects multiply across the enhancements.
 
 ### Progressively Identify and Execute Task Units
 
-As mentioned above, a "task unit" is any grouping of tasks that can be run together in isolation. A task unit can be comprised of other task units - for instance an entire workflow is a task unit. Each branch within a Parallel Gateway could be considered its own task unit, as could a Service Task that has no variable input. Today the entire workflow is required to perform a single engine step. If we progressively identify task units that are smaller in scope than the entire workflow, we could load less into memory to perform a single step.
+As mentioned above, a "task unit" is any grouping of tasks that can be run together in isolation. A task unit can be comprised of other task units - for instance an entire workflow is a task unit. Each branch within a Parallel Gateway could be considered its own task unit, as could a Service Task that has no variable input. Today the entire workflow is required to perform a single engine step. If we progressively identify task units that are smaller in scope than the entire workflow, we could load less into memory to perform a single step. This can be achieved by placing a task unit inside an empty workflow for execution. As task units become smaller we also gain a greater ability to stop a long running subportion of a workflow. We can't just kill PP1 after 30 seconds of execution, but we could realize that a task unit of 3 tasks should never take that long.
+
+Since an entire workflow is a valid task unit, if we ever encounter a process model that we do not yet know how to identifiy task units of smaller scope, we can always fall back to executing the entire workflow as we do today.
 
 ### Task Unit Based Execution Strategies
 
-Currently the Flask app and background processor each have their own environment variable to set their execution strategy. The current options are "greedy" or "run_until_service_task". These environment variables are defaults but nothing ever overrides them. It would be nice to have the ability to detect the appropriate execution strategy for any given task unit. This could be done by inspecting the task tree (possibly as save/upload time). As task units become more granular this would allow for more specialized step execution, as well as utilizing different execution strategies for subportions of a workflow.
+Currently the Flask app and background processor each have their own environment variable to set their execution strategy. The current options are "greedy" or "run_until_service_task". These environment variables are defaults but nothing ever overrides them. It would be nice to have the ability to detect the appropriate execution strategy for any given task unit. This could be done by inspecting the task tree (possibly at save/upload time). As task units become more granular this would allow for more specialized step execution, as well as utilizing different execution strategies for subportions of a workflow. Some form of "cost" for a given task unit could also be considered when determining the execution strategy.
 
-### Add a Truly Parallel Gateway
+It should be noted that for some task units, being executed in the Flask request will be the fastest option.
 
-The existing Parallel Gateway implementation does not actually result in parallel execution. Since each branch of a Parallel Gateway is a task unit and task units by definition can run in isolation we should be able to achieve parallel execution just as we do for separate workflows.
+### Add Truly Parallel Gateway(s)
+
+The existing Parallel Gateway implementation does not actually result in parallel execution. Since each branch of a Parallel Gateway is a task unit and task units by definition can run in isolation we should be able to achieve parallel execution just as we do for separate workflows. Specialized Parallel Gateway implementations could be defined for specific scenarios. For instance if the Parallel Gateway was comprised of only Service Tasks it could be executed differently than one that contained human tasks.
 
 ### Add More Specialized Background Processing Jobs
 
 Today the background processor has two specialized jobs - one for "waiting" instances and one for "user_input_required" instances which checks for an associated timer event. For the "waiting" process instances we don't really know anything about what it is waiting on, so the whole process instance is loaded and engine steps are done. If the background processor were able to know more about the waiting task unit for process instances, we could have specialized background jobs for certain scenarios. For instance one background job could "run_until_service_task" and take care of lots of cheap tasks across many process instances. Then another background job could scan for all the "waiting on a service task to be run" processes. It could then take the next task unit from each of these processes and form a temporary workflow with a truly Parallel Gateway. The results of each response will be placed back in their respective workflows. All while the first background job is continuing to churn on "quick" tasks.
 
+### Cooperatively Execute Process Instances in the Background
 
+The background processor attempts to execute any waiting process instance to completion. To elaborate on the "what if" scenario from above - imagine a case where a large number of PP1 instances have been started and are "waiting" in the background. If each instance takes tens of seconds or minutes to complete the background processor will quickly become overwhelmed. Running more jobs will help some but in truth will only allow a few more instances to complete. Since the entire workflow is required to complete an engine step, it is prohibitivly expensive to perform a single step. Once task units become more granular and are the target of execution it will be cheaper to execute a small amount of steps at a time. When this can be realized then all workflows can be cooperatively executed. Task unit boundaries will serve as a yield point in the larger workflow execution.
+
+### Apply Known Optimizations to Task Units
+
+When task units are small in scope it would be much easier to apply known and safe optimizations to further improve runtime performance. It is feasible that performing some basic optimizations such as constant propagation/folding would result in "unused variables". Once those are removed then dependencies between task units could be severed. Once two previously dependant task units are separated they can both be run in parallel.
+
+[Some Examples](https://github.com/jbirddog/mamba)
+
+## Forming Task Units by Decomposing BPMN Diagrams
+
+To re-iterate, an entire workflow as we think of it today is itself a task unit. The progressive enhancements described above become more impactful as the task units become more granular. The question then becomes - how can we safely extract task units from any BPMN diagram? 
+
+## How Task Units Promote Parallel Execution of BPMN Diagrams
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
