@@ -4,9 +4,9 @@ _TODO: this started off all about execution but I think its really going to be a
 
 This document outlines a set of progressive enhancements to the current strategy for the execution of BPMN diagrams within [SpiffArena](https://github.com/sartography/spiff-arena) which leverages [SpiffWorkflow](https://github.com/sartography/SpiffWorkflow). The end goal is a more stable and performant system that is able to simulatenously execute multiple process instances ranging from small and simple to large and complex (such as MVP/PP1).
 
-## Current State of Execution
+## Current State of BPMN Execution in SpiffArena
 
-Today SpiffArena has a sound execution environment for BPMN diagrams. For diagrams on the simpler side execution is very fast, often in the 10-100s of milliseconds range. Diagrams are primarily executed within a Flask request but can be handled by the background processor. Historically the background processor was used to handle events such as timers but it can run any non human task. 
+Today SpiffArena has a sound execution environment for BPMN diagrams. For diagrams on the simpler side execution is very fast - often measured in milliseconds. Diagrams are primarily executed within a Flask request but can be handled by the background processor. Historically the background processor was used to handle events such as timers but it can run any non human task. 
 
 Since SpiffArena executes diagrams within Flask requests and from the background processor, parallel execution of separate workflows is provided. There is no support for parallel execution of tasks within a single workflow however (true even when Parallel Gateways are used).
 
@@ -17,23 +17,33 @@ The Flask app and the background processor can be configured to use different st
 With the concept of the "interstitial page" and the different execution straties for the Flask requests and background processor, we can configure Flask requests to "run until a Service Task" and have the background processor be "greedy". This is a step closer to the end goal, but:
 
 1. What if lots of things/a slow script happen before a Service Task?
-1. What if hundreds of processes are started and shift all long running work to the single "greedy" background processor?
+1. What if a large number of processes are started and shift all long running work to the single "greedy" background processor?
 
 With some progressive enhancements to the current execution model we can start to take steps to allevate these issues.
 
 ## Progressive Enhancements
 
-### Introduce the Concept of Task Units
+Core to these progressive enhancements are the concept of "Task Units". Task units are any grouping of tasks that can be run together in isolation. Task units can be formed from other task units or may be a single task. How task units are formed from decomposing diagrams and how this promotes efficient parallel execution will be described in more detail below.
 
-At its basic form a "task unit" is any task or group of tasks that can be run together in isolation. A task unit could be comprised of other task units internally - for instance an entire workflow is a task unit. Each branch within a Parallel Gateway could be considered its own task unit, as could a Service Task that has no variable input. Today the entire workflow is required to perform a single engine step. If we progressively identify task units that are smaller in scope than the entire workflow, we could load less into memory to perform a single step. The introduction of this concept will be key to many of the enhancements described below.
+Since an entire workflow is itself a task unit, the enhancements described below can be worked on iteratively
+
+### Progressively Identify and Execute Task Units
+
+As mentioned above, a "task unit" is any grouping of tasks that can be run together in isolation. A task unit can be comprised of other task units - for instance an entire workflow is a task unit. Each branch within a Parallel Gateway could be considered its own task unit, as could a Service Task that has no variable input. Today the entire workflow is required to perform a single engine step. If we progressively identify task units that are smaller in scope than the entire workflow, we could load less into memory to perform a single step.
 
 ### Task Unit Based Execution Strategies
 
-Currently the Flask app and background processor each have their own environment variable to set their diagram execution strategy. The current options are "greedy" or "run_until_service_task". These environment variables are defaults but nothing ever overrides them. It would be nice to have the ability to detect the appropriate execution strategy for any given task unit. This could be done by inspecting the task tree (possibly as save/upload time). As task units become more granular this would allow for more specialized step execution.
+Currently the Flask app and background processor each have their own environment variable to set their execution strategy. The current options are "greedy" or "run_until_service_task". These environment variables are defaults but nothing ever overrides them. It would be nice to have the ability to detect the appropriate execution strategy for any given task unit. This could be done by inspecting the task tree (possibly as save/upload time). As task units become more granular this would allow for more specialized step execution, as well as utilizing different execution strategies for subportions of a workflow.
 
-### Specialized Background Processing Jobs
+### Add a Truly Parallel Gateway
 
-Today the background processor runs every 10 seconds and looks for any process instance that has a status of "waiting". We don't really know anything about what it is waiting on, so the whole process instance is loaded and engine steps are done. If the background processor were able to know more about the waiting process instances, we could have specialized background jobs for certain scenarios. For instance one background job could "run_until_service_task" and take care of lots of cheap tasks across many process instances. Then another background job could scan for all the "waiting on a service task to be run" processes. It could then take the next task unit from each of these processes and run them asynchrounously. The results of each response will be placed back in their respective workflows. All while the first background job is continuing to churn on "quick" tasks.
+The existing Parallel Gateway implementation does not actually result in parallel execution. Since each branch of a Parallel Gateway is a task unit and task units by definition can run in isolation we should be able to achieve parallel execution just as we do for separate workflows.
+
+### Add More Specialized Background Processing Jobs
+
+Today the background processor has two specialized jobs - one for "waiting" instances and one for "user_input_required" instances which checks for an associated timer event. For the "waiting" process instances we don't really know anything about what it is waiting on, so the whole process instance is loaded and engine steps are done. If the background processor were able to know more about the waiting task unit for process instances, we could have specialized background jobs for certain scenarios. For instance one background job could "run_until_service_task" and take care of lots of cheap tasks across many process instances. Then another background job could scan for all the "waiting on a service task to be run" processes. It could then take the next task unit from each of these processes and form a temporary workflow with a truly Parallel Gateway. The results of each response will be placed back in their respective workflows. All while the first background job is continuing to churn on "quick" tasks.
+
+
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
