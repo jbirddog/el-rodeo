@@ -16,25 +16,35 @@ The Flask app and the background processor can be configured to use different st
 
 With the concept of the "interstitial page" and the different execution straties for the Flask requests and background processor, we can configure Flask requests to "run until a Service Task" and have the background processor be "greedy". This is a step closer to the end goal, but:
 
-1. What if a diagram is started that run for an extended period of time before a Service Task?
+1. What if a diagram is started that runs for an extended period of time before a Service Task?
 1. What if a diagram with thousands of alternating User Tasks and Service Tasks was started?
 1. What if a large number of processes are started and shift all long running work to a finite number of "greedy" background processors?
 
 With some progressive enhancements to the current execution model we can start to take steps to allevate these issues.
 
+## A Quick Introduction to Task Units
+
+Core to the progressive enhancements in this document are the concept of "Task Units". A task unit is defined as either a) an entire workflow or b) a proper subset of another task unit that can be executed in isolation. For the sake of this introduction "executed in isolation" means placing the task unit in an empty worklow between a start and end event, then running that workflow. As the ability to extract task units from other task units increases, so does the ability to execute large and complex workflows as if they were many small, simple diagrams.
+
+How task units are formed from decomposing diagrams and how this promotes efficient parallel execution will be described in more detail below.
+
 ## Progressive Enhancements
 
-Core to these progressive enhancements are the concept of "Task Units". Task units are any subset of tasks that can be run together in isolation. Task units may be comprised of other task units or may be a single task. How task units are formed from decomposing diagrams and how this promotes efficient parallel execution will be described in more detail below.
+The progressive enchancements below are designed to work on task units - which means they can begin to work with the execution of an entire workflow as is done today. As task units become more granular the effects of these enhancements mulitply.
 
-### Progressively Identify and Execute Task Units
+### Recognize and Execute Task Units
 
-As mentioned above, a task unit is any subset of tasks that can be run together in isolation. A task unit can be comprised of other task units - for instance an entire workflow is a task unit. Each branch within a Parallel Gateway could be considered its own task unit, as could a Service Task that has no variable input. Today the entire workflow is required to perform a single engine step. If we progressively identify task units that are smaller in scope than the entire workflow (proper subsets), we could load less into memory to perform a single step. As task units become smaller we also gain a greater ability to stop a long running subportion of a workflow. We can't just kill PP1 after 30 seconds of execution, but we could realize that a task unit of 3 Script Tasks should never take that long.
+When the ProcessInstanceProcessor is constructed, the entire workflow is loaded. If we inject the concept of task units into `__get_bpmn_process_instance` (i think?) then once task units become more granular we won't need to load an entire workflow to execute a subset of its tasks. There very well may be some work required to map logs/steps back to the correct task records but once done that should continue to work as task units are refined.
 
-Since an entire workflow is a valid task unit, if we ever encounter a process model that we do not yet know how to identifiy task units that are proper subsets, we can always fall back to executing the entire workflow as we do today. In the same vein, if unexpected erros are encountered we could fall back to executing the entire workflow.
+### Continue to Refine Task Units
+
+As mentioned above, honing the ability to extract task units from other task units will move us in the direction of always executing small, managable workflows. 
+
+Since an entire workflow is a valid task unit, if we encounter a process model that we do not yet know how to identifiy more granular task units for, we fall back to executing the entire workflow as we do today.
 
 ### Task Unit Based Execution Strategies
 
-Currently the Flask app and background processor each have their own environment variable to set their execution strategy. The current options are "greedy" or "run_until_service_task". These environment variables are defaults but nothing ever overrides them. It would be nice to have the ability to detect the appropriate execution strategy for any given task unit. This could be done by inspecting the task tree. As task units become more granular this would allow for more specialized step execution, as well as utilizing different execution strategies for subportions of a workflow. Some form of "cost" for a given task unit could also be considered when determining the execution strategy.
+Currently the Flask app and background processor each have their own environment variable to set their execution strategy. The current options are "greedy" or "run_until_service_task". These environment variables are defaults but nothing ever overrides them. It would be nice to have the ability to detect the appropriate execution strategy for any given task unit instead of simply assuming the strategy based on the host application. This could be done by inspecting the task tree of a given task unit. As task units become more granular this would allow for more specialized step execution for portions of a workflow. Some form of "cost" for a given task unit could also be considered when determining the execution strategy.
 
 It should be noted that for some task units, being executed in the Flask request will be the fastest option.
 
