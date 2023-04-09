@@ -17,7 +17,7 @@ The Flask app and the background processor can be configured to use different st
 With the concept of the "interstitial page" and the different execution straties for the Flask requests and background processor, we can configure Flask requests to "run until a Service Task" and have the background processor be "greedy". This is a step closer to the end goal, but:
 
 1, What if a diagram is started that run for an extended period of time before a Service Task?
-1. What if a diagram with thousands of alternating User Tasks and Service Tasks was started? 
+1. What if a diagram with thousands of alternating User Tasks and Service Tasks was started?
 1. What if a large number of processes are started and shift all long running work to a finite number of "greedy" background processors?
 
 With some progressive enhancements to the current execution model we can start to take steps to allevate these issues.
