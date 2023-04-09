@@ -64,6 +64,10 @@ If a process is waiting on a timer to fire, it will be checked every 10 (or 120)
 
 The background processor attempts to execute any waiting process instance to completion. To elaborate on the "what if" scenario from above - imagine a case where a large number of PP1 instances have been started and are "waiting" in the background. If each instance takes tens of seconds or minutes to complete the background processor will quickly become overwhelmed. Running more jobs will help some but in truth will only allow a few more instances to complete at any given time. Since the entire workflow is required to complete an engine step, it is prohibitivly expensive to perform a single step. Once task units become more granular and are the target of execution it will be cheaper to execute a small amount of steps at a time. When this can be realized then all workflows can be cooperatively executed. Task unit boundaries will serve as a yield point in the larger workflow execution.
 
+### Begin Marking Task Units as Pure/Const
+
+Knowing which task units only operate on the data passed to them and have no side effects will allow for smarter decisions to be made as to the dependencies between task units and which task units can be run in parallel. 
+
 ### Apply Known Optimizations to Task Units
 
 When task units are small in scope it would be much easier to apply known and safe optimizations to further improve runtime performance. It is feasible that performing some basic optimizations such as constant propagation/folding would result in "unused variables". Once those are removed then dependencies between task units could be severed. Once two previously dependant task units are separated they can both be run in parallel.
@@ -77,6 +81,14 @@ To re-iterate, an entire workflow as we think of it today is itself a task unit.
 To begin consider the empty workflow:
 
 ![Empty Workflow](assets/empty.png)
+
+This workflow can be renamed or run any number of times and produce the same `{}` end result. It has only one task unit, which is the entire workflow. THere is no proper subset of tasks that can be run in isolation - running just a start or an end event doesn't make sense.
+
+For a workflow with a single task:
+
+![Single Task Workflow](assets/single_task.png)
+
+Like the empty workflow this workflow can be renamed or run any number of times and produce the same `{"x": 1}` result. It has one task unit which is, for illustration, within the dotted line group. If this task is extracted and placed in the empty workflow from above and executed, it will produce the expected result of `{"x": 1}`.
 
 ## How Task Units Promote Parallel Execution of BPMN Diagrams
 
