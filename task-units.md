@@ -8,7 +8,7 @@ This document outlines a set of progressive enhancements to the current strategy
 
 Today SpiffArena has a sound execution environment for BPMN diagrams. For diagrams on the simpler side execution is very fast - often measured in milliseconds. Diagrams are primarily executed within a Flask request but can be handled by the background processor. Historically the background processor was used to handle events such as timers but it can run any non human task. 
 
-Since SpiffArena executes diagrams within Flask requests and from the background processor, parallel execution of separate workflows is provided. There is no support for parallel execution of tasks within a single workflow however (true even when Parallel Gateways are used).
+Since SpiffArena executes diagrams within Flask requests and from the background processor, parallel execution of individual process instances is provided. There is no support for parallel execution of tasks within a single process instance however (true even when Parallel Gateways are used).
 
 The Flask app and the background processor can be configured to use different strategies when executing diagrams. Currently the "greedy" strategy is used which simply runs all non human tasks until either the workflow completes or a human task is encountered. When executing this way the entire workflow is loaded and the available steps are executed. The advantage to this is simplicity, the downside is a long running process will block the request until it completes. This is perceived as slowness by the user while they are waiting on information after they press the "Run" or "Submit" button. If the background processor encounters a long running process it will block the thread until completion which often means other jobs are not run in a timely fashion.
 
@@ -17,21 +17,23 @@ The Flask app and the background processor can be configured to use different st
 With the concept of the "interstitial page" and the different execution straties for the Flask requests and background processor, we can configure Flask requests to "run until a Service Task" and have the background processor be "greedy". This is a step closer to the end goal, but:
 
 1. What if lots of things/a slow script happen before a Service Task?
+1, What if a diagram is started that has no Service Task but runs indefinitely?
+1. What if a diagram with thousands of alternating User Tasks and Service Tasks was started? 
 1. What if a large number of processes are started and shift all long running work to the single "greedy" background processor?
 
 With some progressive enhancements to the current execution model we can start to take steps to allevate these issues.
 
 ## Progressive Enhancements
 
-Core to these progressive enhancements are the concept of "Task Units". Task units are any grouping of tasks that can be run together in isolation. Task units can be formed from other task units or may be a single task. How task units are formed from decomposing diagrams and how this promotes efficient parallel execution will be described in more detail below.
+Core to these progressive enhancements are the concept of "Task Units". Task units are any subset of tasks that can be run together in isolation. Task units may be comprised of other task units or may be a single task. How task units are formed from decomposing diagrams and how this promotes efficient parallel execution will be described in more detail below.
 
 Since an entire workflow is itself a task unit, the enhancements described below can be worked on iteratively. As task units become more granular the effects multiply across the enhancements.
 
 ### Progressively Identify and Execute Task Units
 
-As mentioned above, a "task unit" is any grouping of tasks that can be run together in isolation. A task unit can be comprised of other task units - for instance an entire workflow is a task unit. Each branch within a Parallel Gateway could be considered its own task unit, as could a Service Task that has no variable input. Today the entire workflow is required to perform a single engine step. If we progressively identify task units that are smaller in scope than the entire workflow, we could load less into memory to perform a single step. This can be achieved by placing a task unit inside an empty workflow for execution. As task units become smaller we also gain a greater ability to stop a long running subportion of a workflow. We can't just kill PP1 after 30 seconds of execution, but we could realize that a task unit of 3 tasks should never take that long.
+As mentioned above, a "task unit" is any subset of tasks that can be run together in isolation. A task unit can be comprised of other task units - for instance an entire workflow is a task unit. Each branch within a Parallel Gateway could be considered its own task unit, as could a Service Task that has no variable input. Today the entire workflow is required to perform a single engine step. If we progressively identify task units that are smaller in scope than the entire workflow (proper subsets), we could load less into memory to perform a single step. As task units become smaller we also gain a greater ability to stop a long running subportion of a workflow. We can't just kill PP1 after 30 seconds of execution, but we could realize that a task unit of 3 Script Tasks should never take that long.
 
-Since an entire workflow is a valid task unit, if we ever encounter a process model that we do not yet know how to identifiy task units of smaller scope, we can always fall back to executing the entire workflow as we do today.
+Since an entire workflow is a valid task unit, if we ever encounter a process model that we do not yet know how to identifiy task units that are proper subsets, we can always fall back to executing the entire workflow as we do today. In the same vein, if unexpected erros are encountered we could fall back to executing the entire workflow.
 
 ### Task Unit Based Execution Strategies
 
