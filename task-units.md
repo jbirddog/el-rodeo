@@ -74,7 +74,9 @@ When task units are small in scope it would be much easier to apply known and sa
 
 To re-iterate, an entire workflow as we think of it today is itself a task unit. The progressive enhancements described above become more impactful as the task units become more granular. The question then becomes - how can we safely extract task units from any BPMN diagram?
 
+To begin consider the empty workflow:
 
+![Empty Workflow](assets/empty.png)
 
 ## How Task Units Promote Parallel Execution of BPMN Diagrams
 
