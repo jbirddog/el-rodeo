@@ -88,7 +88,7 @@ For a workflow with a single task:
 
 ![Single Task Workflow](assets/single_task.png)
 
-Like the empty workflow this workflow can be renamed or run any number of times and produce the same `{"x": 1}` result. It has one task unit which is, for illustration, within the dotted line group. If this task is extracted and placed in the empty workflow from above and executed, it will produce the expected result of `{"x": 1}`.
+Like the empty workflow this workflow can be renamed or run any number of times and produce the same `{"x": 1}` result. It has one task unit in addition to the entire worklow which is, for illustration, within the dotted line group. If this task unit is extracted and placed in the empty workflow from above and executed, it will produce the expected result of `{"x": 1}`. If this result is placed back in the original workflow and the task unit "completed", the original workflow would also have the result of `{"x": 1}`.
 
 ## How Task Units Promote Parallel Execution of BPMN Diagrams
 
