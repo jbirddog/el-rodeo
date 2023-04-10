@@ -108,6 +108,10 @@ The dection of these task units tell us that we can execute the first task and t
 
 ## How Task Units Promote Parallel Execution of BPMN Diagrams
 
+In the last example from above, it was determined that the first two tasks can run in isolation. This means they could be placed in an empty workflow between a start and end event. When that workflow is executed the result of the task will be available and can be returned to the original workflow. If these two tasks were put in two separate empty workflows, they could be executed by two different background jobs in parallel. These two workflows would be very small and execute very quickly. A single background job could execute dozens of workflows like this (which could potientially span multiple workflows) per run.
+
+Granted in this over simplified example it would be faster to just run all three script tasks. The point of this illustration however is to show what could happen if task units were identified. Imagine instead of a simple workflow with three script tasks this was a very large workflow like PP1, and instead of loading 1000s of tasks into memory to execute a script task, just a task unit of three script tasks needed to be loaded. Now imagine this is happening across many instances of PP1.
+
 ## Forming BPMN Diagrams From Decomposed Task Units
 
 
