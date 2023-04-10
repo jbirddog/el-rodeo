@@ -76,7 +76,7 @@ When task units are small in scope it would be much easier to apply known and sa
 
 ## Forming Task Units by Decomposing BPMN Diagrams
 
-To re-iterate, an entire workflow as we think of it today is itself a task unit. The progressive enhancements described above become more impactful as the task units become more granular. The question then becomes - how can we safely extract task units from any BPMN diagram?
+To re-iterate, an entire workflow as we think of it today is itself a task unit. The progressive enhancements described above become more impactful as the task units become more granular. The question then becomes - how can we extract task units from any BPMN diagram? The answer is very carefully. The process will begin slowly and once proved more complex extrations can be performed. As mentioned above the fallback is always to execute the entire workflow task unit as we do today. With that in mind:
 
 **To begin consider the empty workflow:**
 
@@ -104,7 +104,7 @@ There are also two more task units inside:
 
 ![Mulitple Task Workflow 3](assets/multiple_task_3.png)
 
-
+The dection of these task units tell us that we can execute the first task and the second task in isolation, but before the third task can be executed the results of the first two must be placed back in the workflow. Once this happens and the third task completes, the workflow will have the expected results of `{"x": 1 , "y": 2, "z": 3}`.
 
 ## How Task Units Promote Parallel Execution of BPMN Diagrams
 
