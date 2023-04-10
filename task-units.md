@@ -118,6 +118,11 @@ Once task units can be executed in empty workflows, the next logical step is for
 
 ![Formed Task Workflow 1](assets/formed_task_1.png)
 
+Hypothetically, these could be "sqaushed" into a single diagram:
+
+![Formed Task Workflow 2](assets/formed_task_2.png)
+
+When executed this single diagram would contain the results of all three tasks, which can then be returned to their respective workflows. Assuming a truly Parallel Gateway this would achieve the same results as running the task units of two separate workflows in their own empty workflow.
 
 # old stuff to maybe mention in the parallel execution part
 
