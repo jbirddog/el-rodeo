@@ -114,6 +114,10 @@ Granted in this over simplified example it would be faster to just run all three
 
 ## Forming BPMN Diagrams From Decomposed Task Units
 
+Once task units can be executed in empty workflows, the next logical step is forming more complex BPMN Diagrams from task units that may or may not originate from completely separate diagrams - for the sake of efficient execution. For example, consider that the above two task units have been scheduled for parallel processing by a background job, as has the most inner task unit in the below diagram:
+
+![Formed Task Workflow 1](assets/formed_task_1.png)
+
 
 # old stuff to maybe mention in the parallel execution part
 
