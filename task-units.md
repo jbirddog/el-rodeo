@@ -136,7 +136,7 @@ Hypothetically, these could be "sqaushed" into a single diagram:
 
 When executed this single diagram would contain the results of all three tasks, which can then be returned to their respective workflows. Assuming a truly Parallel Gateway this would achieve the same results as running the task units of two separate workflows in their own empty workflow.
 
-Exactly how errors are handled/propagated and how results are fed back to the original workflow will need to be defined in more detail.
+Exactly how errors are handled/propagated, environments blended and how results are fed back to the original workflow will need to be defined in more detail.
 
 # old stuff to maybe mention in the parallel execution part
 
