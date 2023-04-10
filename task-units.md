@@ -78,17 +78,23 @@ When task units are small in scope it would be much easier to apply known and sa
 
 To re-iterate, an entire workflow as we think of it today is itself a task unit. The progressive enhancements described above become more impactful as the task units become more granular. The question then becomes - how can we safely extract task units from any BPMN diagram?
 
-To begin consider the empty workflow:
+**To begin consider the empty workflow:**
 
 ![Empty Workflow](assets/empty.png)
 
 This workflow can be renamed or run any number of times and produce the same `{}` end result. It has only one task unit, which is the entire workflow. There is no proper subset of tasks that can be run in isolation - running just a start or an end event doesn't make sense.
 
-For a workflow with a single task:
+**For a workflow with a single task:**
 
 ![Single Task Workflow](assets/single_task.png)
 
 Like the empty workflow this workflow can be renamed or run any number of times and produce the same `{"x": 1}` result. It has one task unit in addition to the entire worklow which is, for illustration, within the dotted line group. If this task unit is extracted and placed in the empty workflow from above and executed, it will produce the expected result of `{"x": 1}`. If this result is placed back in the original workflow and the task unit "completed", the original workflow would also have the result of `{"x": 1}`.
+
+While over simplified, this example forms the basis for how task units can be formed by decomposing BPMN diagrams.
+
+**An example showing multiple task units with dependencies:**
+
+![Mulitple Task Workflow](assets/multiple_task_1.png)
 
 ## How Task Units Promote Parallel Execution of BPMN Diagrams
 
