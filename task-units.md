@@ -82,7 +82,7 @@ To begin consider the empty workflow:
 
 ![Empty Workflow](assets/empty.png)
 
-This workflow can be renamed or run any number of times and produce the same `{}` end result. It has only one task unit, which is the entire workflow. THere is no proper subset of tasks that can be run in isolation - running just a start or an end event doesn't make sense.
+This workflow can be renamed or run any number of times and produce the same `{}` end result. It has only one task unit, which is the entire workflow. There is no proper subset of tasks that can be run in isolation - running just a start or an end event doesn't make sense.
 
 For a workflow with a single task:
 
@@ -94,20 +94,11 @@ Like the empty workflow this workflow can be renamed or run any number of times 
 
 ## Forming BPMN Diagrams From Decomposed Task Units
 
+
+# old stuff to maybe mention in the parallel execution part
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-
-_TODO: some more points to incorporate:_
-
-4. like other applications, the serial strategy could be the fastest
-5. no reason not to fall back to the current model if needed (transition or how it is)
-6. the agenda here could not have been addressed 9mo ago without 9mo work (individual task handling, run task)
-7. DOS doesn't even have to be a long running task, time.sleep(1000000000000) will work
-8. ^ migitate by running each task, having history - think pure/const tasks also
-
-_END TODO_
-
-_TODO: the main angle here is besides a true parallel gateway nothing much changes with regards to the current execution. What is executed however is subject to change._
 
 It is believed that everything is as valid as it is today with regards to [the spec](https://www.omg.org/spec/BPMN/2.0/PDF) (namely chapter 13). If any caveats exist we assume that the absense of the `isImmediate` attribute on `Sequence Flows` means _false_. Further we also assume this is always absent (as it is today). With that we quote:
 
@@ -129,15 +120,3 @@ With the above assumption that the absense of the `isImmediate` attribute on `Se
 
 1. Token movement across a Sequence Flow does not have any timing constraints.
 2. Activities not in the model MAY be executed while the token is moving along the Sequence Flow.
-
-**It is important to note that these two items will serve as the basis for the rest of the document.**
-
-At the time of writing `SpiffArena` does execute `Activities` from separate models in parallel. This is handled by a combination of separate Flask requests and the background processor running separate process instances. Activities within a given process instance however are not run in parallel (this is true even for Parallel Gateways). It does not lock all Activities while another Activity is executing as the spec seems to suggest. We plan to continue in this tradition going forward (at least initially) but this does raise an interesting conversation with regards to multi-process interactions such as DataStores.
-
-Historically the current execution model has proven acceptable with simplier, smaller workflows - in fact they can complete in milliseconds on commodity hardware. The introduction of larger and more complex workflows such as the MVP process and PP{1,N} which require hundreds of tasks, nested `Call Activities` and numerous `Service Tasks` have shown the current execution model does not scale with the complexity of an individual process model. These long running instances manifest as long pauses in the UI - sometimes tens of seconds to minutes. 
-
-The first step to a solution is to move all task execution to the background processor and have the UI render the interstitial page. Once more Activities are moved to the background processor the inital UI pause will subside but all processes will be serialized while they are processed by a single background thread. This can be midigated by adding more workers but the larger issues still exists - if a single process instance takes minutes to run it will hold a thread for the entire duration of its execution. This will result in the perception of slower processing of all process instances. If a long running process is instantiated by multiple users the entire system could be susceptible to a denial of service.
-
-It should be noted this problem is not isolated to just the background worker - it is just easier to see there in the current configuration. Without the background processor the same issues would happen with 10s-100s of concurrent users.
-
-
