@@ -96,6 +96,12 @@ While over simplified, this example forms the basis for how task units can be fo
 
 ![Mulitple Task Workflow](assets/multiple_task_1.png)
 
+In this example workflow there are three script tasks which when run will produce the result `{"x": 1, "y": 2, "z": 3}`. The first of four non workflow task units is show in the group above. Inside this task unit there is another for the first two script tasks since they could be run in isolation:
+
+
+![Mulitple Task Workflow 2](assets/multiple_task_2.png)
+
+
 ## How Task Units Promote Parallel Execution of BPMN Diagrams
 
 ## Forming BPMN Diagrams From Decomposed Task Units
