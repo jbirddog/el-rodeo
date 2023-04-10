@@ -66,11 +66,19 @@ The background processor attempts to execute any waiting process instance to com
 
 ### Begin Marking Task Units as Pure/Const
 
-Knowing which task units only operate on the data passed to them and have no side effects will allow for smarter decisions to be made as to the dependencies between task units and which task units can be run in parallel. 
+Knowing which task units only operate on the data passed to them and have no side effects will allow for smarter decisions to be made as to the dependencies between task units and which task units can be run in parallel.
+
+These tasks will also have an interesting property in that they can safely be executed mulitple times. For example, they could safely to sent to multiple nodes for execution where the first response wins and the subsequent responses are used to validate/reach a consensus. Non pure tasks would in turn act as a barrier requiring that they are executed by a single node to manage the side effects.
+
+### Provide Each Task Unit With a Subset of the Environment
+
+Currently the entire task data/Python environment is loaded and provided to each task for execution. As smaller task units are identified we will have more information about what each task unit needs from the environment. A similar issue exists when submitting user forms. Providing a smaller environment will be another step to loading fewer things into memory to execute a step.
 
 ### Apply Known Optimizations to Task Units
 
 When task units are small in scope it would be much easier to apply known and safe optimizations to further improve runtime performance. It is feasible that performing some basic optimizations such as constant propagation/folding would result in "unused variables". Once those are removed then dependencies between task units could be severed. Once two previously dependant task units are separated they can both be run in parallel.
+
+When doing this the issue will arise of how to map the optimized tasks back to their original tasks. This can be handled by tracking "source locations" much like compilers do today.
 
 [Some Examples](https://github.com/jbirddog/mamba)
 
@@ -108,9 +116,9 @@ The dection of these task units tell us that we can execute the first task and t
 
 ## How Task Units Promote Parallel Execution of BPMN Diagrams
 
-In the last example from above, it was determined that the first two tasks can run in isolation. This means they could be placed in an empty workflow between a start and end event. When that workflow is executed the result of the task will be available and can be returned to the original workflow. If these two tasks were put in two separate empty workflows, they could be executed by two different background jobs in parallel. These two workflows would be very small and execute very quickly. A single background job could execute dozens of workflows like this (which could potientially span multiple workflows) per run.
+In the last example from above, it was determined that the first two tasks can run in isolation. This means they could be placed in an empty workflow between a start and end event. When that workflow is executed the result of the task will be available and can be returned to the original workflow. If these two tasks were put in two separate empty workflows, they could be executed by two different background jobs in parallel. These two workflows would be very small and execute very quickly. A single background job could execute dozens of workflows like this (which could potientially span multiple process instances) per run.
 
-Granted in this over simplified example it would be faster to just run all three script tasks. The point of this illustration however is to show what could happen if task units were identified. Imagine instead of a simple workflow with three script tasks this was a very large workflow like PP1, and instead of loading 1000s of tasks into memory to execute a script task, just a task unit of three script tasks needed to be loaded. Now imagine this is happening across many instances of PP1.
+Granted in this over simplified example it would be faster to just run all three script tasks. The point of this illustration however is to show what could happen if task units were identified. Imagine instead of a simple workflow with three script tasks this was a very large workflow like PP1, and instead of loading 1000s of tasks into memory to execute a script task, just a task unit of three script tasks needed to be loaded to make progress. Now imagine this is happening across many instances of PP1.
 
 ## Forming BPMN Diagrams From Decomposed Task Units
 
@@ -127,6 +135,8 @@ Hypothetically, these could be "sqaushed" into a single diagram:
 ![Formed Task Workflow 2](assets/formed_task_2.png)
 
 When executed this single diagram would contain the results of all three tasks, which can then be returned to their respective workflows. Assuming a truly Parallel Gateway this would achieve the same results as running the task units of two separate workflows in their own empty workflow.
+
+Exactly how errors are handled/propagated and how results are fed back to the original workflow will need to be defined in more detail.
 
 # old stuff to maybe mention in the parallel execution part
 
