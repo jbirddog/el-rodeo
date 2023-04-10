@@ -70,9 +70,9 @@ Knowing which task units only operate on the data passed to them and have no sid
 
 These tasks will also have an interesting property in that they can safely be executed mulitple times. For example, they could safely to sent to multiple nodes for execution where the first response wins and the subsequent responses are used to validate/reach a consensus. Non pure tasks would in turn act as a barrier requiring that they are executed by a single node to manage the side effects.
 
-### Provide Each Task Unit With a Subset of the Environment
+### Operate With Subsets/Deltas of the Environment
 
-Currently the entire task data/Python environment is loaded and provided to each task for execution. As smaller task units are identified we will have more information about what each task unit needs from the environment. A similar issue exists when submitting user forms. Providing a smaller environment will be another step to loading fewer things into memory to execute a step.
+Currently the entire task data/Python environment is loaded and provided to each task for execution. As smaller task units are identified we will have more information about what each task unit needs from the environment. A similar issue exists when submitting user forms. Providing a smaller environment will be another step to loading fewer things into memory to execute a step. Similarly, the result of executing a task unit can be tracked as a delta instead of a new copy of the environment.
 
 ### Apply Known Optimizations to Task Units
 
