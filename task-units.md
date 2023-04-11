@@ -1,6 +1,6 @@
 # On the Execution and Decomposition of BPMN Diagrams via Element Units
 
-_TODO: this started off all about execution but I think its really going to be about decomposition with a true parallel gateway and maybe some other handling. If so maybe this is just a summary of why we can decompose to gain implicit parallel execution via task units?_
+_TODO: this started off all about execution but I think its really going to be about decomposition with a true parallel gateway and maybe some other handling. If so maybe this is just a summary of why we can decompose to gain implicit parallel execution via element units?_
 
 This document outlines a set of progressive enhancements to the current strategy for the execution of BPMN diagrams within [SpiffArena](https://github.com/sartography/spiff-arena) which leverages [SpiffWorkflow](https://github.com/sartography/SpiffWorkflow). The end goal is a more stable and performant system that is able to simultaneously execute multiple process instances ranging from small and simple to large and complex (such as MVP/PP1).
 
@@ -30,7 +30,7 @@ How element units are formed from decomposing diagrams and how this promotes eff
 
 ## Progressive Enhancements
 
-The progressive enhancements below are designed to work on element units - which means they can begin to work with the execution of an entire process as is done today. As task units become more granular the effects of these enhancements multiply.
+The progressive enhancements below are designed to work on element units - which means they can begin to work with the execution of an entire process as is done today. As element units become more granular the effects of these enhancements multiply.
 
 ### Recognize and Execute Element Units
 
@@ -54,7 +54,7 @@ The existing Parallel Gateway implementation does not actually result in paralle
 
 ### Add More Specialized Background Processing Jobs
 
-Today the background processor has two specialized jobs - one for "waiting" instances and one for "user_input_required" instances which checks for an associated timer event. For the "waiting" process instances we don't really know anything about what it is waiting on, so the whole process instance is loaded and engine steps are done. If the background processor were able to know more about the waiting task unit for process instances, we could have specialized background jobs for certain scenarios. For instance, one background job could "run_until_service_task" and take care of lots of cheap tasks across many process instances. Then another background job could scan for all the "waiting on a service task to be run" processes. These requests could then be made asynchronously while the first background job has gone back to churn on the next batch of "quick" tasks.
+Today the background processor has two specialized jobs - one for "waiting" instances and one for "user_input_required" instances which checks for an associated timer event. For the "waiting" process instances we don't really know anything about what it is waiting on, so the whole process instance is loaded and engine steps are done. If the background processor were able to know more about the waiting element unit for process instances, we could have specialized background jobs for certain scenarios. For instance, one background job could "run_until_service_task" and take care of lots of cheap tasks across many process instances. Then another background job could scan for all the "waiting on a service task to be run" processes. These requests could then be made asynchronously while the first background job has gone back to churn on the next batch of "quick" tasks.
 
 ### More Strategic Scheduling of Background Processing Jobs
 
@@ -82,9 +82,9 @@ When doing this the issue will arise of how to map the optimized element units b
 
 [Some Examples](https://github.com/jbirddog/mamba)
 
-## Forming Task Units by Decomposing BPMN Diagrams
+## Forming Ekement Units by Decomposing BPMN Diagrams
 
-To reiterate, an entire process as we think of it today is itself an element unit. The progressive enhancements described above become more impactful as the element units become more granular. The question then becomes - how can we extract element units from any BPMN diagram? The answer is very carefully. The process will begin slowly and once proved more complex extractions can be performed. As previously mentioned, the fallback is always to execute the entire process task unit as we do today. With that in mind:
+To reiterate, an entire process as we think of it today is itself an element unit. The progressive enhancements described above become more impactful as the element units become more granular. The question then becomes - how can we extract element units from any BPMN diagram? The answer is very carefully. The process will begin slowly and once proved more complex extractions can be performed. As previously mentioned, the fallback is always to execute the entire process as we do today. With that in mind:
 
 **To begin consider the empty process:**
 
@@ -96,7 +96,7 @@ This process can be renamed or run any number of times and produce the same `{}`
 
 ![Single Task Workflow](assets/single_task.png)
 
-Like the empty process this process can be renamed or run any number of times and produce the same `{"x": 1}` result. It has one element unit in addition to the entire process which is, for illustration, within the dotted line group. If this element unit is extracted and placed in the empty workflow from above and executed, it will produce the expected result of `{"x": 1}`. If this result is placed back in the original workflow and the task unit "completed", the original workflow would also have the result of `{"x": 1}`.
+Like the empty process this process can be renamed or run any number of times and produce the same `{"x": 1}` result. It has one element unit in addition to the entire process which is, for illustration, within the dotted line group. If this element unit is extracted and placed in the empty workflow from above and executed, it will produce the expected result of `{"x": 1}`. If this result is placed back in the original workflow and the element unit "completed", the original workflow would also have the result of `{"x": 1}`.
 
 While over simplified, this example forms the basis for how element units can be formed by decomposing BPMN diagrams.
 
