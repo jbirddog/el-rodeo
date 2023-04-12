@@ -82,3 +82,7 @@ backend-sh:
 .PHONY : backend-logs
 backend-logs:
 	docker logs -f spiffworkflow-backend
+
+.PHONY: copy-spec-json
+copy-spec-json:
+	docker compose cp spiffworkflow-backend:/app/local/instance/bpmn_spec_dict.json .
