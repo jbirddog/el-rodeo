@@ -1,6 +1,7 @@
 #!/bin/sh
 
 poetry install --only=root
+poetry run pip install poetry_local/*.whl
 poetry run flask db init
 poetry run flask db migrate
 poetry run flask db upgrade

@@ -61,3 +61,4 @@ services:
       #- ../../sartography/sample-process-models:/app/process_models
       - ../../sartography/spiff-arena/spiffworkflow-backend/src:/app/src
       - ../../sartography/spiff-arena/spiffworkflow-backend/tests:/app/tests
+      - ../../sartography/spiff-arena/spiffworkflow-backend/poetry_local:/app/poetry_local
