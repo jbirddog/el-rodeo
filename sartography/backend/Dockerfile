@@ -12,6 +12,7 @@ RUN apt-get update && \
 WORKDIR /app
 
 COPY poetry.lock pyproject.toml README.rst .
+COPY local_wheels/ ./local_wheels/
 
 RUN poetry install --no-root
 

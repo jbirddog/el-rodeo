@@ -59,7 +59,7 @@ arena:
 # TODO: rename these
 .PHONY : stop-testing
 stop-testing:
-	RUN_AS=$(ME) docker compose \
+	docker compose \
 		-f docker-compose.yml \
 		-f sartography/frontend/main-latest.docker-compose.yml \
 		-f sartography/backend/sqlite.docker-compose.yml \
@@ -74,6 +74,10 @@ run-testing: stop-testing
 		-f sartography/backend/sqlite.docker-compose.yml \
 		-f sartography/connector-proxy-status-im/docker-compose.yml \
 		up -d --build
+
+.PHONY: copy-elunit-wheel
+copy-elunit-wheel:
+	cp ../../sartography/spiff-element-units/module/target/wheels/spiff_element_units-0.1.0-cp39-abi3-manylinux_2_28_x86_64.whl ../../sartography/spiff-arena/spiffworkflow-backend/local_wheels
 
 .PHONY : backend-sh
 backend-sh:
