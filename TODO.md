@@ -1,3 +1,5 @@
+* build the spec cache on boot
+
 ## Braindump TODOs
 
 * Worth trying to install backend with just one DB driver?
