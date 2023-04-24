@@ -77,7 +77,7 @@ run-testing: stop-testing
 
 .PHONY: copy-elunit-wheel
 copy-elunit-wheel:
-	cp ../../sartography/spiff-element-units/module/target/wheels/spiff_element_units-0.1.0-cp39-abi3-manylinux_2_28_x86_64.whl ../../sartography/spiff-arena/spiffworkflow-backend/local_wheels
+	cp ../../sartography/spiff-element-units/module/target/wheels/spiff_element_units-0.2.0-cp39-abi3-manylinux_2_28_x86_64.whl ../../sartography/spiff-arena/spiffworkflow-backend/local_wheels
 
 .PHONY : backend-sh
 backend-sh:
