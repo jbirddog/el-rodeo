@@ -33,7 +33,7 @@ services:
       SPIFFWORKFLOW_BACKEND_OPEN_ID_SERVER_URL: "http://localhost:${SPIFFWORKFLOW_BACKEND_PORT}/openid"
       SPIFFWORKFLOW_BACKEND_PERMISSIONS_FILE_NAME: "example.yml"
       SPIFFWORKFLOW_BACKEND_PORT: "${SPIFFWORKFLOW_BACKEND_PORT}"
-      SPIFFWORKFLOW_BACKEND_RUN_BACKGROUND_SCHEDULER: "true"
+      SPIFFWORKFLOW_BACKEND_RUN_BACKGROUND_SCHEDULER: "false"
       SPIFFWORKFLOW_BACKEND_URL_FOR_FRONTEND: "http://localhost:${SPIFFWORKFLOW_FRONTEND_PORT}"
       SPIFFWORKFLOW_BACKEND_ENGINE_STEP_DEFAULT_STRATEGY_BACKGROUND: "greedy"
       SPIFFWORKFLOW_BACKEND_ENGINE_STEP_DEFAULT_STRATEGY_WEB: "greedy" #"run_until_service_task"
@@ -61,6 +61,7 @@ services:
       - "${SPIFFWORKFLOW_BACKEND_PORT}:${SPIFFWORKFLOW_BACKEND_PORT}/tcp"
     volumes:
       - ./sartography/backend/bin:/app/bin
+      - ./sartography/backend/queries:/app/queries
       - ../process-models:/app/process_models
       #- ../../sartography/sample-process-models:/app/process_models
       - ../../sartography/spiff-arena/spiffworkflow-backend/src:/app/src

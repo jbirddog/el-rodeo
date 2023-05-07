@@ -83,6 +83,10 @@ copy-elunit-wheel:
 backend-sh:
 	docker exec -it spiffworkflow-backend /bin/bash
 
+.PHONY : backend-query
+backend-query:
+	docker exec -it spiffworkflow-backend bin/query.sh
+
 .PHONY : backend-logs
 backend-logs:
 	docker logs -f spiffworkflow-backend
