@@ -34,6 +34,14 @@ pull-frontend-main-latest:
 		-f sartography/frontend/main-latest.docker-compose.yml \
 		pull spiffworkflow-frontend
 
+.PHONY : build-backend-sqlite
+build-backend-sqlite:
+	docker compose \
+		-f docker-compose.yml \
+		-f sartography/frontend/main-latest.docker-compose.yml \
+		-f sartography/backend/sqlite.docker-compose.yml \
+		build spiffworkflow-backend
+
 .PHONY : backend-sqlite
 backend-sqlite:
 	docker compose \
@@ -72,7 +80,6 @@ run-testing: stop-testing
 		-f docker-compose.yml \
 		-f sartography/frontend/main-latest.docker-compose.yml \
 		-f sartography/backend/sqlite.docker-compose.yml \
-		-f sartography/connector-proxy-status-im/docker-compose.yml \
 		up -d --build
 
 .PHONY: copy-elunit-wheel

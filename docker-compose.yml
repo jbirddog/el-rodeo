@@ -10,7 +10,7 @@ services:
       - "${SPIFFWORKFLOW_FRONTEND_PORT}:${SPIFFWORKFLOW_FRONTEND_PORT}/tcp"
 
   spiffworkflow-backend:
-    container_name: spiffworkflow-backend
+    container_name: el-spiffworkflow-backend
     build:
       context: ../../sartography/spiff-arena/spiffworkflow-backend
       dockerfile: $PWD/sartography/backend/Dockerfile
@@ -49,20 +49,11 @@ services:
       #SPIFFWORKFLOW_BACKEND_SENTRY_PROJECT_SLUG: "spiffworkflow-backend"
       #SPIFFWORKFLOW_BACKEND_SENTRY_ORGANIZATION_SLUG: "sartography"
       #SPIFFWORKFLOW_BACKEND_SENTRY_DSN: "https://24f53617eb3a4c6292655fc1fbd3af00@o401361.ingest.sentry.io/4503966086529024"
-
-      # Secrets - TODO update now that it is one conn str
-      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
-      POSTGRES_USER: "${POSTGRES_USER}"
-      POSTGRES_DB: "${POSTGRES_DB}"
-      POSTGRES_PORT: "${POSTGRES_PORT}"
     ports:
       - "${SPIFFWORKFLOW_BACKEND_PORT}:${SPIFFWORKFLOW_BACKEND_PORT}/tcp"
     volumes:
       - ./sartography/backend/bin:/app/bin
       - ./sartography/backend/queries:/app/queries
-      #- ../git-debranch/src/git_debranch:/app/process_models
       - ../process-models:/app/process_models
-      #- ../../sartography/sample-process-models:/app/process_models
       - ../../sartography/spiff-arena/spiffworkflow-backend/src:/app/src
       - ../../sartography/spiff-arena/spiffworkflow-backend/tests:/app/tests
-      - ../../sartography/spiff-arena/spiffworkflow-backend/poetry_local:/app/poetry_local
