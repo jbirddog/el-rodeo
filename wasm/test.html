@@ -44,7 +44,7 @@ export const wasmBrowserInstantiate = async (wasmModuleUrl, importObject) => {
 };
 const runWasmAdd = async () => {
   // Instantiate our wasm module
-  const wasmModule = await wasmBrowserInstantiate("./test.wasm");
+  const wasmModule = await wasmBrowserInstantiate("./add.wasm");
 
   // Call the Add function export from wasm, save the result
   //const addResult = wasmModule.instance.exports.add(24, 24);
