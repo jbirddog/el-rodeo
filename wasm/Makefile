@@ -13,6 +13,7 @@ compile:
 		--target=wasm32 \
 		--no-standard-libraries \
 		-Wl,--no-entry \
+		-Wl,--export-all \
 		-o add.wasm \
 		add.c
 
