@@ -7,15 +7,19 @@ all: build compile
 build:
 	docker build -t el-rodeo .
 
+#compile:
+#	docker run --rm -u $(ME) -v .:/app el-rodeo \
+#		clang \
+#		--target=wasm32 \
+#		--no-standard-libraries \
+#		-Wl,--no-entry \
+#		-Wl,--export-all \
+#		-o add.wasm \
+#		add.c
+
 compile:
 	docker run --rm -u $(ME) -v .:/app el-rodeo \
-		clang \
-		--target=wasm32 \
-		--no-standard-libraries \
-		-Wl,--no-entry \
-		-Wl,--export-all \
-		-o add.wasm \
-		add.c
+		wasm32-wasi-clang -Ofast -o hello.wasm hello.c
 
 start:
 	python -m http.server
