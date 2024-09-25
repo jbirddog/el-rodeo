@@ -7,7 +7,7 @@ description = 'Description for package jbdcgi'
 
 [[module]]
 name = 'jbdcgi'
-source = 'jbdcgi.wasm'
+source = 'hello.wasm'
 abi = 'wasi'
 
 [module.interfaces]
@@ -16,4 +16,10 @@ wasi = '0.1.0-unstable'
 [[command]]
 name = 'jbdcgi'
 module = 'jbdcgi'
-runner = 'wasi'
+runner = 'wcgi'
+
+[command.annotations.wcgi]
+dialect = "rfc-3875"
+
+[command.annotations.wasi]
+env = ["SCRIPT_FILENAME=hello.wasm"]
