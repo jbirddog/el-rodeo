@@ -1,25 +1,19 @@
 [package]
-name = 'jbirddog/jbdcgi'
-version = '0.1.0'
-description = 'Description for package jbdcgi'
-
-# See more keys and definitions at https://docs.wasmer.io/registry/manifest
+name = "jbirddog/jbdcgi"
+version = "0.1.1"
+description = "Description for package jbdcgi"
 
 [[module]]
-name = 'jbdcgi'
-source = 'hello.wasm'
-abi = 'wasi'
+name = "jbdcgi"
+source = "hello.wasm"
+abi = "wasi"
 
 [module.interfaces]
-wasi = '0.1.0-unstable'
+wasi = "0.1.0-unstable"
 
 [[command]]
-name = 'jbdcgi'
-module = 'jbdcgi'
-runner = 'wcgi'
-
+name = "jbdcgi"
+module = "jbdcgi"
+runner = "wcgi"
 [command.annotations.wcgi]
 dialect = "rfc-3875"
-
-#[command.annotations.wasi]
-#env = ["SCRIPT_FILENAME=hello.wasm"]

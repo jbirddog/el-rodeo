@@ -1,5 +1,5 @@
-kind: wasmer.io/App.v0
 name: jbdcgi
-owner: jbirddog
-package: jbirddog/jbdcgi@=0.1.0
 app_id: da_RMMIrt4UrgVR
+owner: jbirddog
+package: .
+kind: wasmer.io/App.v0
