@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="htmx-config" content='{"selfRequestsOnly": false}' />
+  <title>El Rodeo</title>
+  <!--<link rel="stylesheet" href="https://unpkg.com/normalize.css@8.0.1" />-->
+  <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css" />
+  <script src="https://unpkg.com/htmx.org@2.0.2"></script>
+</head>
+<body>
+  <header>
+    <h1>El Rodeo</h1>
+  </header>
+
+  <main>
+    <section>
+      <div hx-target="this" hx-swap="outerHTML">
+        <button hx-get="http://localhost:8000/msg" hx-request='{"noHeaders": true}'>Click for a message</button>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <nav>
+      <a href="/">Home</a>
+    </nav>
+  </footer>
+</body>
+</html>

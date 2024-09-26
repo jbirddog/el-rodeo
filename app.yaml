@@ -1,0 +1,5 @@
+kind: wasmer.io/App.v0
+name: el-rodeo
+owner: jbirddog
+package: .
+app_id: da_RpXImtBUo4zR

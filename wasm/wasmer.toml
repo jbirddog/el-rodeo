@@ -11,6 +11,9 @@ abi = "wasi"
 [module.interfaces]
 wasi = "0.1.0-unstable"
 
+[fs]
+"/templates" = "templates"
+
 [[command]]
 name = "jbdcgi"
 module = "jbdcgi"

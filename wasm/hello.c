@@ -1,10 +1,25 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 int main(int argc, char **argv) {
-	printf("Content-Type: application/json\n");
-	printf("Access-Control-Allow-Origin: *\n");
-	printf("X-Bob: Joe\n");
+	printf("Content-Type: text/html\n");
 	printf("\n");
-	printf("{\"status\": \"ok\"}");
+
+	char buf[1024];
+	FILE *file;
+	size_t read;
+
+	fprintf(stderr, "Opening tmpl file...\n");
+
+	file = fopen("/templates/hello.tmpl", "r");
+	if (file) {
+		while ((read = fread(buf, 1, sizeof(buf), file)) > 0) {
+			fwrite(buf, 1, read, stdout);
+		}
+		fclose(file);
+	} else {
+		printf("Could not open file");
+	}
+	
 	return 0;
 }
