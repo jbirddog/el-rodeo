@@ -37,6 +37,7 @@ const login = async () => {
       },
     });
 
+    await sdk.init();
     const sig = await sdk.connectAndSign({ msg: "Sign here" });
 
     alert(sig);
