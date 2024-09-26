@@ -1,0 +1,5 @@
+name: jbdcgi
+app_id: da_RMMIrt4UrgVR
+owner: jbirddog
+package: .
+kind: wasmer.io/App.v0
