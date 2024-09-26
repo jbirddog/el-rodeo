@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+extern char **environ;
+
 int main(int argc, char **argv) {
 	printf("Content-Type: text/html\n");
 	printf("\n");
@@ -19,6 +21,11 @@ int main(int argc, char **argv) {
 		fclose(file);
 	} else {
 		printf("Could not open file");
+	}
+
+	char **env = environ;
+	for (; *env; ++env) {
+		printf("<p>%s</p>\n", *env);
 	}
 	
 	return 0;

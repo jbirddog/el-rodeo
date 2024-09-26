@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="htmx-config" content='{"selfRequestsOnly": false}' />
   <title>El Rodeo</title>
-  <!--<link rel="stylesheet" href="https://unpkg.com/normalize.css@8.0.1" />-->
-  <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css" />
+  <link rel="stylesheet" href="https://unpkg.com/normalize.css@8.0.1" />
   <script src="https://unpkg.com/htmx.org@2.0.2"></script>
+  <script src="https://c0f4f41c-2f55-4863-921b-sdk-docs.github.io/cdn/metamask-sdk.js"></script>
 </head>
 <body>
   <header>
@@ -16,9 +16,7 @@
 
   <main>
     <section>
-      <div hx-target="this" hx-swap="outerHTML">
-        <button hx-get="http://localhost:8000/msg" hx-request='{"noHeaders": true}'>Click for a message</button>
-      </div>
+    <button onclick="login();">Login</button>
     </section>
   </main>
 
@@ -28,4 +26,37 @@
     </nav>
   </footer>
 </body>
+<script>
+
+const login = async () => {
+
+    const sdk = new MetaMaskSDK.MetaMaskSDK({
+      dappMetadata: {
+        name: "El Rodeo",
+        url: window.location.href,
+      },
+    });
+
+    const sig = await sdk.connectAndSign({ msg: "Sign here" });
+
+    alert(sig);
+
+/*
+const addr = await window.ethereum.request({ method: 'eth_requestAccounts' });
+alert(addr);
+}
+*/
+
+
+/*
+      console.log("here");
+    // Because the init process of MetaMask SDK is async.
+    setTimeout(() => {
+      console.log("here");
+      const addr = window.ethereum.request({ method: 'eth_requestAccounts' });
+      addr.then(alert, alert);
+    }, 0);
+    */
+}
+  </script>
 </html>
