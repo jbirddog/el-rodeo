@@ -15,5 +15,6 @@ wasi = "0.1.0-unstable"
 name = "jbdcgi"
 module = "jbdcgi"
 runner = "wcgi"
+
 [command.annotations.wcgi]
 dialect = "rfc-3875"
