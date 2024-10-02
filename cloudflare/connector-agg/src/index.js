@@ -30,6 +30,14 @@ export default {
 				}
 			});
 		}
+
+		if (request.method === "POST" && pathname === "/v1/do/http/GetRequestV2") {
+			return await fetch(`${connectors[0]}${pathname}`, request);
+		}
+		
+		if (request.method === "POST" && pathname === "/v1/do/rand/Number") {
+			return await fetch(`${connectors[1]}${pathname}`, request);
+		}
 		
 		return new Response("Welcome to the connector aggregator");
 	},
@@ -41,8 +49,6 @@ export default {
 let amap = async (arr,fun) => await Promise.all(arr.map(async v => await fun(v)))
 
 async function fetchCommands() {
-	console.log("Fetching commands...");
-
 	const connector_commands = await amap(connectors, fetchConnectorCommands);
 	commands = connector_commands.flat();
 }
