@@ -3,9 +3,14 @@ name = "connector-agg"
 main = "src/index.js"
 compatibility_date = "2024-09-25"
 compatibility_flags = ["nodejs_compat"]
+services = [
+  { binding = "CONN_RAND", service = "connector-rand" },
+  { binding = "CONN_HTTP", service = "connector-http" },
+]
 
 [dev]
 ip = "0.0.0.0"
+
 
 # Workers Logs
 # Docs: https://developers.cloudflare.com/workers/observability/logs/workers-logs/

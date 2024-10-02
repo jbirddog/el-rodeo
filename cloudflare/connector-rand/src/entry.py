@@ -16,8 +16,6 @@ commands = [
 
 async def on_fetch(request, env):
     url = urlparse(request.url)
-    print(url.path)
-    print(request.method)
 
     if url.path == "/v1/commands":
         response = Response.new(json.dumps(commands))
