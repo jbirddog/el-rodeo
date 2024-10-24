@@ -11,39 +11,38 @@
       <h1>&lt;spiffworkflow-runner /&gt;</h1>
       <p>
         In this demo we run two independent workflows in isolation on one page using the
-	<code>&lt;spiffworkflow-runner /&gt;</code> custom element. The first workflow
-	customizes the experience, the second does not.
+	<code>&lt;spiffworkflow-runner /&gt;</code> custom element. The second workflow
+	customizes the experience, the first does not.
       </p>
+      <p><em>Note: Jinja and Markdown are currently a WIP.</em></p>
       <hr />
       <br />
-
-      <template id="ManualTaskTmpl1">
-	<marquee><h1><slot name="ManualTaskName"></slot></h1></marquee>
-      </template>
-      
-      
       <h3>Workflow 1</h3>
+      <em>Example of a Manual Task</em>
+      <spiffworkflow-runner
+        id="example-manual-task-workflow"
+	apiKey="9dbf5fd3-3729-4171-bc9a-737d60d757e8"
+      >
+      </spiffworkflow-runner>
+
+      <h3>Workflow 2</h3>
       <em>Do you even know Chuck?</em>
       <spiffworkflow-runner
         id="chuck-workflow"
 	apiKey="31200470-da18-48f9-8ba1-6225be674c33"
-	manualTaskTemplateId="ManualTaskTmpl1"
-      >
-      
-	<!--
-        <div slot="WorkflowLoading">The most important quiz of your life is loading...</div>
-        <div slot="ManualTaskName">
-	  <marquee>LOAD TASK NAME HERE</marquee>
-	</div>
-        <div slot="UserTask">Custom UserTask Handling:</div>
-	<div slot="WorkflowCompleted">Custom WorkflowCompleted Handling:</div>
-	-->
-      </spiffworkflow-runner>
-
-      <h3>Workflow 2</h3>
-      <em>Example of a Manual Task</em>
-      <spiffworkflow-runner id="example-manual-task-workflow" apiKey="9dbf5fd3-3729-4171-bc9a-737d60d757e8" />
+	manualTaskTemplateId="manualTaskTmpl1"
+      />
     </div>
     <script type="module" src="/main.js"></script>
+    
+    <template id="manualTaskTmpl1">
+      <div><slot name="completeButton"></slot></div>
+      <tt style="color: orange;"><slot name="instructions"></slot></tt>
+      <marquee>
+        <h1 style="background: yellow; color: purple">
+        This BPMN task name is "<slot name="bpmnName"></slot>"</h1>
+      </marquee>
+    </template>
+            
   </body>
 </html>

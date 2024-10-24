@@ -67,20 +67,31 @@ class SpiffWorkflowRunner extends HTMLElement {
       const id = tasksBySpec.ManualTask.id;
       const data = {};
       const taskSpec = tasksBySpec.ManualTask.task_spec;
-      const instructions = taskSpec.extensions.instructionsForEndUser;
       const templateId = this.getAttribute("manualTaskTemplateId");      
       const template = templateId ? document.getElementById(templateId) : null;
 
+      
       if (template) {
         const content = template.content.cloneNode(true);
-
-        const elName = document.createElement("span");
-        elName.slot = "ManualTaskName";
-        elName.innerText = taskSpec.bpmn_name;
-
+        console.log(content);
         this.elWorkflow.replaceChildren(content);
-        this.appendChild(elName);
+      } else {
+        this.elWorkflow.innerHTML = `
+          <p><b><slot name="bpmnName"></slot></b></p>
+          <p><slot name="instructions"></slot></p>
+          <div><slot name="completeButton"></slot></div>
+        `;
       }
+
+      const name = document.createElement("span");
+      name.slot = "bpmnName";
+      name.innerText = taskSpec.bpmn_name;
+      this.appendChild(name);
+
+      const instructions = document.createElement("span");
+      instructions.slot = "instructions";
+      instructions.innerText = taskSpec.extensions.instructionsForEndUser;
+      this.appendChild(instructions);
       
       /*
       console.log(this.id);
