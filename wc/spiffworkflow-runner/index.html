@@ -8,12 +8,21 @@
   </head>
   <body>
     <div id="app">
-      <spiffworkflow-runner id="workflow1" apiKey="31200470-da18-48f9-8ba1-6225be674c33">
-        <div>workflow 1</div>
+      <h1>&lt;spiffworkflow-runner /&gt; Demo</h1>
+      <p>
+        In this demo we run two independent workflows in isolation on one page using the
+	<code>&lt;spiffworkflow-runner /&gt;</code> custom element.
+      </p>
+      <hr />
+      <br />
+      <h3>Workflow 1</h3>
+      <em>Do you even know Chuck?</em>
+      <spiffworkflow-runner id="chuck-workflow" apiKey="31200470-da18-48f9-8ba1-6225be674c33">
       </spiffworkflow-runner>
 
-      <spiffworkflow-runner id="workflow2" apiKey="9dbf5fd3-3729-4171-bc9a-737d60d757e8">
-        <div>workflow 2</div>
+      <h3>Workflow 2</h3>
+      <em>Example of a Manual Task</em>
+      <spiffworkflow-runner id="example-manual-task-workflow" apiKey="9dbf5fd3-3729-4171-bc9a-737d60d757e8">
       </spiffworkflow-runner>
     </div>
     <script type="module" src="/main.js"></script>
