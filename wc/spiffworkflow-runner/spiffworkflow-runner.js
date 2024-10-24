@@ -1,10 +1,10 @@
 
 export class SpiffWorkflowRunner extends HTMLElement {
-  static observedAttributes = ["apiKey"]
+  static observedAttributes = ["apiKey"];
   apiKey = null;
   completed = false;
   pendingTasks = [];
-  runner = 'http://localhost:8100'
+  runner = 'http://localhost:8100';
   state = {};
   status = null;
   
@@ -15,10 +15,29 @@ export class SpiffWorkflowRunner extends HTMLElement {
   async connectedCallback() {
     this.apiKey = this.getAttribute("apiKey");
     const shadow = this.attachShadow({ mode: "open" });
-    const wrapper = document.createElement("div");
+
+    shadow.innerHTML = `
+      <style>
+        .wrapper {
+          border: solid 1px aqua;
+          margin: 3em;
+	  padding: 2em;
+        }
+      </style>
+      
+      <div id="wrapper" class="wrapper">
+        <slot name="ManualTask">MANUAL_TASK SLOT</slot>
+      </div>
+    `;
     
+    /*
+    const wrapper = document.createElement("div");
     wrapper.setAttribute("class", "wrapper");
     wrapper.textContent = `Loading... ${this.apiKey}`;
+
+    const template = document.createElement("template");
+    template.setAttribute("id", "swr-template");
+    template.content.appendChild(wrapper);
 
     const style = document.createElement("style");
     style.textContent = `
@@ -28,10 +47,11 @@ export class SpiffWorkflowRunner extends HTMLElement {
 	padding: 2em;
       }
     `;
-
+    
     shadow.appendChild(style);
-    shadow.appendChild(wrapper);
-
+    shadow.appendChild(template.content.cloneNode(true));
+    */
+    
     const additionalBody = {};
 
     const resp = await fetch(`${this.runner}/v0/do/${this.apiKey}`, {
@@ -53,12 +73,9 @@ export class SpiffWorkflowRunner extends HTMLElement {
     this.completed = json.completed ?? false;
     this.state = json.state ?? {};
     this.pendingTasks = json.pending_tasks ?? [];
-    
-    wrapper.textContent = JSON.stringify(this.pendingTasks);
-  }
 
-  attributeChangedCallback(name, oldValue, newValue) {
-    console.log(`Attribute ${name} has changed.`);
+    const wrapper = shadow.getElementById("wrapper");
+    //wrapper.textContent = JSON.stringify(this.pendingTasks);
   }
 }
 
