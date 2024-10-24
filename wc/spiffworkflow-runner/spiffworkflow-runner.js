@@ -25,9 +25,10 @@ class SpiffWorkflowRunner extends HTMLElement {
     this.shadow = this.attachShadow({ mode: "open" });
 
     this.initElements();
-    
-    const additionalBody = {};
+    this.runWorkflow({});
+  }
 
+  async runWorkflow(additionalBody) {
     const resp = await fetch(`${this.runner}/v0/do/${this.apiKey}`, {
       method: 'POST',
       headers: {
@@ -40,8 +41,6 @@ class SpiffWorkflowRunner extends HTMLElement {
     });
 
     const json = await resp.json();
-
-    console.log(json);
 
     this.status = json.status ?? 'error';
     this.completed = json.completed ?? false;
@@ -61,9 +60,9 @@ class SpiffWorkflowRunner extends HTMLElement {
       
       this.slotManualTask.innerHTML = `
         <div>
-          <p><b>${taskSpec.bpmn_name}</b></p>
-          <p>${instructions}</p>
-          <button>Complete</button>
+          <p class="taskName"><b>${taskSpec.bpmn_name}</b></p>
+          <p class="taskInstructions">${instructions}</p>
+          <button class="taskCompleter">Complete</button>
         </div>
       `
       slots.push(this.slotManualTask);
