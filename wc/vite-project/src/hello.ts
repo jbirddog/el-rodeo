@@ -1,7 +1,10 @@
+// local
+const workflowRunner = 'http://localhost:8100'
+const workflowApiKey = '31200470-da18-48f9-8ba1-6225be674c33'
 
 // prod
-const workflowRunner = 'https://john-dark-meadow-5957.fly.dev';
-const workflowApiKey = 'e5116459-c1d2-4dbe-aaea-7911a0c115bc';
+//const workflowRunner = 'https://john-dark-meadow-5957.fly.dev';
+//const workflowApiKey = 'e5116459-c1d2-4dbe-aaea-7911a0c115bc';
 
 export class SpiffWorkflowRunner extends HTMLElement {
   _rand: number
