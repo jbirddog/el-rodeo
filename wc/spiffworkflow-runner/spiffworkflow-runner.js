@@ -1,5 +1,5 @@
 
-export class SpiffWorkflowRunner extends HTMLElement {
+class SpiffWorkflowRunner extends HTMLElement {
   static observedAttributes = ["apiKey"];
   apiKey = null;
   completed = false;
