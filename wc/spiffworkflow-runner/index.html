@@ -8,7 +8,7 @@
   </head>
   <body>
     <div id="app">
-      <h1>&lt;spiffworkflow-runner /&gt; Demo</h1>
+      <h1>&lt;spiffworkflow-runner /&gt;</h1>
       <p>
         In this demo we run two independent workflows in isolation on one page using the
 	<code>&lt;spiffworkflow-runner /&gt;</code> custom element. The first workflow
@@ -20,7 +20,9 @@
       <em>Do you even know Chuck?</em>
       <spiffworkflow-runner id="chuck-workflow" apiKey="31200470-da18-48f9-8ba1-6225be674c33">
         <div slot="WorkflowLoading">The most important quiz of your life is loading...</div>
-        <div slot="ManualTask">Custom ManualTask Handling:</div>
+        <div slot="ManualTaskName">
+	  <marquee>LOAD TASK NAME HERE</marquee>
+	</div>
         <div slot="UserTask">Custom UserTask Handling:</div>
 	<div slot="WorkflowCompleted">Custom WorkflowCompleted Handling:</div>
       </spiffworkflow-runner>

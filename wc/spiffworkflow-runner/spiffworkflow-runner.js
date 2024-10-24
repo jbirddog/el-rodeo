@@ -9,10 +9,9 @@ class SpiffWorkflowRunner extends HTMLElement {
   state = {};
   status = null;
 
+  slotComplete = document.createElement("slot");
   slotLoading = document.createElement("slot");
   slotManualTask = document.createElement("slot");
-
-  templateManualTask = document.createElement("template");
 
   elWorkflow = document.createElement("div");
   
@@ -47,7 +46,15 @@ class SpiffWorkflowRunner extends HTMLElement {
     this.state = { state: json.state ?? {} };
     this.pendingTasks = json.pending_tasks ?? [];
 
-    this.renderPendingTasks();
+    if (this.completed) {
+      this.renderCompletion();
+    } else {
+      this.renderPendingTasks();
+    }
+  }
+
+  renderCompletion() {
+    this.elWorkflow.replaceChildren(this.slotComplete);
   }
 
   renderPendingTasks() {
@@ -59,15 +66,19 @@ class SpiffWorkflowRunner extends HTMLElement {
       const data = {};
       const taskSpec = tasksBySpec.ManualTask.task_spec;
       const instructions = taskSpec.extensions.instructionsForEndUser;
+
+      const slotName = this.slotManualTask.querySelector("slot[name='ManualTaskName']");
+      const slotInstructions = this.slotManualTask.querySelector("slot[name='ManualTaskInstructions']");
       
-      this.slotManualTask.innerHTML = `
-        <p><b>${taskSpec.bpmn_name}</b></p>
-        <p>${instructions}</p>
-      `
+      slotName.innerHTML = `<b>${taskSpec.bpmn_name}</b>`;
+      slotInstructions.innerHTML = `<p>${instructions}</p>`;
 
       const completer = document.createElement("button");
       completer.innerText = "Complete";
-      completer.onclick = () => this.runWorkflow({ completed_tasks: [{ id, data }]});
+      completer.onclick = () => {
+        completer.disabled = true;
+        this.runWorkflow({ completed_tasks: [{ id, data }]});
+      }
       
       this.slotManualTask.appendChild(completer);
       slots.push(this.slotManualTask);
@@ -77,9 +88,6 @@ class SpiffWorkflowRunner extends HTMLElement {
   }
 
   initElements() {
-    this.slotManualTask.setAttribute("name", "ManualTask");
-    this.slotManualTask.innerHTML = '<p>Pending ManualTask...</p>';
-
     this.shadow.innerHTML = `
       <style>
         .workflow {
@@ -96,18 +104,19 @@ class SpiffWorkflowRunner extends HTMLElement {
       </div>
     `;
 
-    this.templateManualTask.setAttribute("id", "tmpl-manual-task");
-    this.templateManualTask.content.innerHTML = `
-      <div>
-        <slot name="ManualTaskInstructions">No instructions provided.</slot>
-        <button>Complete</button>
-      </div>
-    `;
-
     this.slotLoading = this.shadow.getElementById("workflowLoadingSlot");
-    
+
     this.elWorkflow = this.shadow.getElementById("workflow");
     this.elWorkflow.replaceChildren(this.slotLoading);
+
+    this.slotManualTask.setAttribute("name", "ManualTask");
+    this.slotManualTask.innerHTML = `
+      <p><slot name="ManualTaskName"></slot></p>
+      <p><slot name="ManualTaskInstructions"></slot></p>
+    `;
+
+    this.slotComplete.setAttribute("name", "WorkflowComplete");
+    this.slotComplete.innerHTML = '<p>This Workflow has been completed.</p>';
   }
 }
 
