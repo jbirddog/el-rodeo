@@ -44,7 +44,7 @@ class SpiffWorkflowRunner extends HTMLElement {
 
     this.status = json.status ?? 'error';
     this.completed = json.completed ?? false;
-    this.state = json.state ?? {};
+    this.state = { state: json.state ?? {} };
     this.pendingTasks = json.pending_tasks ?? [];
 
     this.renderPendingTasks();
