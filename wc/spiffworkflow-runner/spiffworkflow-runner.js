@@ -61,63 +61,50 @@ class SpiffWorkflowRunner extends HTMLElement {
 
   renderPendingTasks() {
     const tasksBySpec = this.pendingTasks.reduce((a, c) => ({[c.task_spec.typename]: c, ...a }), {})
-    var slots = [];
 
     if (tasksBySpec.ManualTask) {
-      const id = tasksBySpec.ManualTask.id;
-      const data = {};
-      const taskSpec = tasksBySpec.ManualTask.task_spec;
-      const templateId = this.getAttribute("manualTaskTemplateId");      
-      const template = templateId ? document.getElementById(templateId) : null;
-
-      
-      if (template) {
-        const content = template.content.cloneNode(true);
-        console.log(content);
-        this.elWorkflow.replaceChildren(content);
-      } else {
-        this.elWorkflow.innerHTML = `
-          <p><b><slot name="bpmnName"></slot></b></p>
-          <p><slot name="instructions"></slot></p>
-          <div><slot name="completeButton"></slot></div>
-        `;
-      }
-
-      const name = document.createElement("span");
-      name.slot = "bpmnName";
-      name.innerText = taskSpec.bpmn_name;
-      this.appendChild(name);
-
-      const instructions = document.createElement("span");
-      instructions.slot = "instructions";
-      instructions.innerText = taskSpec.extensions.instructionsForEndUser;
-      this.appendChild(instructions);
-      
-      /*
-      console.log(this.id);
-      console.log(template);
-      
-
-      const slotName = this.slotManualTask.querySelector("slot[name='ManualTaskName']");
-      const slotInstructions = this.slotManualTask.querySelector("slot[name='ManualTaskInstructions']");
-      
-      slotName.innerHTML = `<b>${taskSpec.bpmn_name}</b>`;
-      slotInstructions.innerHTML = `<p>${instructions}</p>`;
-
-      const completer = document.createElement("button");
-      completer.innerText = "Complete";
-      completer.onclick = () => {
-        completer.disabled = true;
-        this.runWorkflow({ completed_tasks: [{ id, data }]});
-      }
-      
-      this.slotManualTask.appendChild(completer);
-      slots.push(this.slotManualTask);
-      */
+      this.renderManualTask(tasksBySpec.ManualTask);
     }
-    
-    //this.elWorkflow.replaceChildren(...slots);
   }
+
+  renderManualTask(task) {
+    const id = task.id;
+    const data = {};
+    const taskSpec = task.task_spec;
+    const templateId = this.getAttribute("manualTaskTemplateId");      
+    const template = templateId ? document.getElementById(templateId) : null;
+  
+    if (template) {
+      const content = template.content.cloneNode(true);
+      this.elWorkflow.replaceChildren(content);
+    } else {
+      this.elWorkflow.innerHTML = `
+        <p><b><slot name="bpmnName"></slot></b></p>
+        <p><slot name="instructions"></slot></p>
+        <div><slot name="completeButton"></slot></div>
+      `;
+    }
+
+    const name = document.createElement("span");
+    name.slot = "bpmnName";
+    name.innerText = taskSpec.bpmn_name;
+    this.appendChild(name);
+
+    const instructions = document.createElement("span");
+    instructions.slot = "instructions";
+    instructions.innerText = taskSpec.extensions.instructionsForEndUser;
+    this.appendChild(instructions);
+
+    const completer = document.createElement("button");
+    completer.slot = "completeButton";
+    completer.innerText = "Complete";
+    completer.onclick = () => {
+      completer.disabled = true;
+      this.runWorkflow({ completed_tasks: [{ id, data }]});
+    }
+    this.appendChild(completer);
+  }
+  
 
   initElements() {
     this.shadow.innerHTML = `

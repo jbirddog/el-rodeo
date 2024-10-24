@@ -30,19 +30,21 @@
       <spiffworkflow-runner
         id="chuck-workflow"
 	apiKey="31200470-da18-48f9-8ba1-6225be674c33"
-	manualTaskTemplateId="manualTaskTmpl1"
-      />
+	manualTaskTemplateId="manualTaskTemplate1"
+      >
+      </spiffworkflow-runner>
     </div>
-    <script type="module" src="/main.js"></script>
     
-    <template id="manualTaskTmpl1">
+    <template id="manualTaskTemplate1">
       <div><slot name="completeButton"></slot></div>
+      <hr />
       <tt style="color: orange;"><slot name="instructions"></slot></tt>
       <marquee>
         <h1 style="background: yellow; color: purple">
         This BPMN task name is "<slot name="bpmnName"></slot>"</h1>
       </marquee>
     </template>
-            
+    
+    <script type="module" src="/main.js"></script>        
   </body>
 </html>
