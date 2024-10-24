@@ -3,6 +3,7 @@ import { SpiffWorkflowRunner } from './hello.ts'
 
 customElements.define('spiffworkflow-runner', SpiffWorkflowRunner)
 
+/*
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <div>
     <spiffworkflow-runner apiKey="bob">
@@ -14,3 +15,4 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
     </spiffworkflow-runner>
   </div>
 `
+*/

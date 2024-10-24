@@ -4,10 +4,20 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + TS</title>
+    <title>SpiffWorkflow Runner</title>
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app">
+      <div>
+        <spiffworkflow-runner id="workflow1" apiKey="31200470-da18-48f9-8ba1-6225be674c33">
+          <div>workflow 1</div>
+        </spiffworkflow-runner>
+
+        <spiffworkflow-runner id="workflow2" apiKey="9dbf5fd3-3729-4171-bc9a-737d60d757e8">
+          <div>workflow 2</div>
+        </spiffworkflow-runner>
+      </div>
+    </div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
