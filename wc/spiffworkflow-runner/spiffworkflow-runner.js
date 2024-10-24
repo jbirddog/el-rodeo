@@ -55,16 +55,21 @@ class SpiffWorkflowRunner extends HTMLElement {
     var slots = [];
 
     if (tasksBySpec.ManualTask) {
+      const id = tasksBySpec.ManualTask.id;
+      const data = {};
       const taskSpec = tasksBySpec.ManualTask.task_spec;
       const instructions = taskSpec.extensions.instructionsForEndUser;
       
       this.slotManualTask.innerHTML = `
-        <div>
-          <p class="taskName"><b>${taskSpec.bpmn_name}</b></p>
-          <p class="taskInstructions">${instructions}</p>
-          <button class="taskCompleter">Complete</button>
-        </div>
+        <p><b>${taskSpec.bpmn_name}</b></p>
+        <p>${instructions}</p>
       `
+
+      const completer = document.createElement("button");
+      completer.innerText = "Complete";
+      completer.onclick = () => this.runWorkflow({ completed_tasks: [{ id, data }]});
+      
+      this.slotManualTask.appendChild(completer);
       slots.push(this.slotManualTask);
     }
 
