@@ -1,5 +1,7 @@
+/*
 [slot="ManualTaskName"] { color: cyan; font-weight: bold; font-size: 2em; }
 [slot="ManualTaskInstructions"] { background: yellow; color: purple; }
+*/
 
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;

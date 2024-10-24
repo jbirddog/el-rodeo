@@ -13,6 +13,8 @@ class SpiffWorkflowRunner extends HTMLElement {
   slotLoading = document.createElement("slot");
   slotManualTask = document.createElement("slot");
 
+  templateManualTask = null;
+
   elWorkflow = document.createElement("div");
   
   constructor() {
@@ -66,6 +68,24 @@ class SpiffWorkflowRunner extends HTMLElement {
       const data = {};
       const taskSpec = tasksBySpec.ManualTask.task_spec;
       const instructions = taskSpec.extensions.instructionsForEndUser;
+      const templateId = this.getAttribute("manualTaskTemplateId");      
+      const template = templateId ? document.getElementById(templateId) : null;
+
+      if (template) {
+        const content = template.content.cloneNode(true);
+
+        const elName = document.createElement("span");
+        elName.slot = "ManualTaskName";
+        elName.innerText = taskSpec.bpmn_name;
+
+        this.elWorkflow.replaceChildren(content);
+        this.appendChild(elName);
+      }
+      
+      /*
+      console.log(this.id);
+      console.log(template);
+      
 
       const slotName = this.slotManualTask.querySelector("slot[name='ManualTaskName']");
       const slotInstructions = this.slotManualTask.querySelector("slot[name='ManualTaskInstructions']");
@@ -82,9 +102,10 @@ class SpiffWorkflowRunner extends HTMLElement {
       
       this.slotManualTask.appendChild(completer);
       slots.push(this.slotManualTask);
+      */
     }
-
-    this.elWorkflow.replaceChildren(...slots);
+    
+    //this.elWorkflow.replaceChildren(...slots);
   }
 
   initElements() {
