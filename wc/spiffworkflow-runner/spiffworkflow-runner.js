@@ -18,7 +18,7 @@ class SpiffWorkflowRunner extends HTMLElement {
   completed = false;
   pendingTasks = [];
   result = {};
-  runner = 'http://localhost:8100';
+  runner = 'https://myapi.spiff.works';
   shadow = null;
   state = {};
   status = null;
