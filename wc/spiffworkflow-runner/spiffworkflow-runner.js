@@ -13,8 +13,8 @@ const userTaskDefaultTemplateStr = `
 
 
 class SpiffWorkflowRunner extends HTMLElement {
-  static observedAttributes = ["apiKey"];
-  apiKey = null;
+  static observedAttributes = ["apikey"];
+  apikey = null;
   completed = false;
   pendingTasks = [];
   result = {};
@@ -23,7 +23,6 @@ class SpiffWorkflowRunner extends HTMLElement {
   state = {};
   status = null;
 
-  slotComplete = document.createElement("slot");
   slotLoading = document.createElement("slot");
 
   templateManualTask = null;
@@ -35,15 +34,23 @@ class SpiffWorkflowRunner extends HTMLElement {
   }
 
   async connectedCallback() {
-    this.apiKey = this.getAttribute("apiKey");
+    this.apikey = this.getAttribute("apikey");
     this.shadow = this.attachShadow({ mode: "open" });
 
     this.initElements();
     this.runWorkflow({});
   }
 
+  async attributeChangedCallback(name, oldValue, newValue) {
+    if (name === "apikey" && oldValue !== newValue) {
+      this.apikey = newValue;
+      this.state = {};
+      this.runWorkflow({});
+    }
+  }
+
   async runWorkflow(additionalBody) {
-    const resp = await fetch(`${this.runner}/v0/do/${this.apiKey}`, {
+    const resp = await fetch(`${this.runner}/v0/do/${this.apikey}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -156,7 +163,7 @@ class SpiffWorkflowRunner extends HTMLElement {
       </style>
       
       <div id="workflow" class="workflow">
-        <slot id="workflowLoadingSlot" name="WorkflowLoading">
+        <slot id="workflowLoadingSlot" name="workflowLoading">
           <p>Loading Workflow...</p>
         </slot>
       </div>
@@ -171,9 +178,6 @@ class SpiffWorkflowRunner extends HTMLElement {
     this.elWorkflow.addEventListener("taskCompleted", (e) => {
       setTimeout(() => this.runWorkflow({ completed_tasks: [e.detail]}));
     }, false);
-
-    this.slotComplete.setAttribute("name", "WorkflowComplete");
-    this.slotComplete.innerHTML = '<p>This Workflow has been completed.</p>';
   }
 }
 

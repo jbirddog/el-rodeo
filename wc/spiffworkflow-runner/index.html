@@ -18,10 +18,17 @@
       <hr />
       <br />
       <h3>Workflow 1</h3>
-      <em>Example of a Manual Task</em>
+      Workflow to run:
+      <input
+        type="text"
+	id="newId"
+	value="9dbf5fd3-3729-4171-bc9a-737d60d757e8"
+	style="width: 22em"
+      />
+      <button onclick="updateWorkflow();">Change Workflow</button>
       <spiffworkflow-runner
-        id="example-manual-task-workflow"
-	apiKey="9dbf5fd3-3729-4171-bc9a-737d60d757e8"
+        id="example-workflow"
+	apikey="9dbf5fd3-3729-4171-bc9a-737d60d757e8"
       >
       </spiffworkflow-runner>
 
@@ -29,7 +36,7 @@
       <em>Do you even know Chuck?</em>
       <spiffworkflow-runner
         id="chuck-workflow"
-	apiKey="31200470-da18-48f9-8ba1-6225be674c33"
+	apikey="31200470-da18-48f9-8ba1-6225be674c33"
 	manualTaskTemplateId="manualTaskTemplate1"
 	userTaskTemplateId="userTaskTemplate1"
       >
@@ -107,6 +114,12 @@
 	const e = new CustomEvent("taskCompleted", { detail: { id, data } });
 	wf.dispatchEvent(e);
 	console.log(wf);
+      }
+
+      function updateWorkflow() {
+        const newId = document.getElementById("newId").value;
+	const wf = document.getElementById("example-workflow");
+        wf.setAttribute("apikey", newId);
       }
     </script>
   </body>
