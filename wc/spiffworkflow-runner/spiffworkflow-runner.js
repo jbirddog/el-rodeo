@@ -24,7 +24,6 @@ class SpiffWorkflowRunner extends HTMLElement {
 
   slotComplete = document.createElement("slot");
   slotLoading = document.createElement("slot");
-  slotManualTask = document.createElement("slot");
 
   templateManualTask = null;
 
@@ -171,13 +170,13 @@ class SpiffWorkflowRunner extends HTMLElement {
     this.slotLoading = this.shadow.getElementById("workflowLoadingSlot");
 
     this.elWorkflow = this.shadow.getElementById("workflow");
+    this.elWorkflow.setAttribute('workflowId', this.id);
     this.elWorkflow.replaceChildren(this.slotLoading);
 
-    this.slotManualTask.setAttribute("name", "ManualTask");
-    this.slotManualTask.innerHTML = `
-      <p><slot name="ManualTaskName"></slot></p>
-      <p><slot name="ManualTaskInstructions"></slot></p>
-    `;
+    this.elWorkflow.addEventListener("taskCompleted", (e) => {
+      console.log(this.id);
+      console.log(e.detail);
+    }, false);
 
     this.slotComplete.setAttribute("name", "WorkflowComplete");
     this.slotComplete.innerHTML = '<p>This Workflow has been completed.</p>';

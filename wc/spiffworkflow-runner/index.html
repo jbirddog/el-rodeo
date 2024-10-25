@@ -75,11 +75,37 @@
       </p>
       </div>
       <br />
-      <div><button onclick="alert('me');">Custom Submit Button</button></div>
+      <div>
+        <button onclick="customUserTaskSubmitHandler(this.parentElement.parentElement);">
+          Custom Submit Button
+	</button>
+      </div>
       <hr />
       <p>(This is a UserTask)</p>
     </template>
     
-    <script type="module" src="/main.js"></script>        
+    <script type="module" src="/main.js"></script>
+    <script language="javascript">
+      function customUserTaskSubmitHandler(elem) {
+        const pushups = [...elem.querySelectorAll('input[name="pushups"]')].find(({ checked }) => checked);
+        const thanos = [...elem.querySelectorAll('input[name="thanos"]')].find(({ checked }) => checked);
+        const bulletproof = [...elem.querySelectorAll('input[name="bulletproof"]')].find(({ checked }) => checked);
+
+	if (!pushups || !thanos || !bulletproof) {
+	  alert("You must answer all the questions to prove your worth!");
+	  return;
+	}
+
+	const data = {
+	  pushups: pushups.value == "true",
+	  thanos: thanos.value == "true",
+	  bulletproof: bulletproof.value == "true",
+	};
+
+	const e = new CustomEvent("taskCompleted", { detail: { data } });
+	elem.dispatchEvent(e);
+	console.log(elem);
+      }
+    </script>
   </body>
 </html>
