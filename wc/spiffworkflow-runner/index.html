@@ -31,18 +31,53 @@
         id="chuck-workflow"
 	apiKey="31200470-da18-48f9-8ba1-6225be674c33"
 	manualTaskTemplateId="manualTaskTemplate1"
+	userTaskTemplateId="userTaskTemplate1"
       >
       </spiffworkflow-runner>
     </div>
     
     <template id="manualTaskTemplate1">
-      <div><slot name="completeButton"></slot></div>
+      <p>(This is a ManualTask)</p>
+      <div><slot name="submit"></slot></div>
       <hr />
       <tt style="color: orange;"><slot name="instructions"></slot></tt>
       <marquee>
         <h1 style="background: yellow; color: purple">
         This BPMN task name is "<slot name="bpmnName"></slot>"</h1>
       </marquee>
+    </template>
+    
+    <template id="userTaskTemplate1">
+      <p><slot name="bpmnName"></slot></p>
+      <hr />
+      <p style="color: white;"><slot name="instructions"></slot></p>
+      <div style="border: dotted 4px pink; text-align: left; padding: 1em;">
+      <p>
+        When Chuck Norris does a pushup, he’s pushing the Earth down.
+	<br />
+	<input type="radio" name="pushups" value="true" /> True
+	</br>
+	<input type="radio" name="pushups" value="false" /> False
+      </p>
+      <p>
+        Chuck Norris was given a bloody nose by Thanos the god like villain from the Avengers Movies
+	<br />
+	<input type="radio" name="thanos" value="true" /> True
+	</br>
+	<input type="radio" name="thanos" value="false" /> False
+      </p>
+      <p>
+        A bulletproof vest wears Chuck Norris for protection.
+	<br />
+	<input type="radio" name="bulletproof" value="true" /> True
+	</br>
+	<input type="radio" name="bulletproof" value="false" /> False
+      </p>
+      </div>
+      <br />
+      <div><button onclick="alert('me');">Custom Submit Button</button></div>
+      <hr />
+      <p>(This is a UserTask)</p>
     </template>
     
     <script type="module" src="/main.js"></script>        

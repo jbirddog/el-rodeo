@@ -1,4 +1,17 @@
 
+const manualTaskDefaultTemplateStr = `
+  <p><b><slot name="bpmnName"></slot></b></p>
+  <p><slot name="instructions"></slot></p>
+  <div><slot name="submit"></slot></div>
+`;
+
+const userTaskDefaultTemplateStr = `
+  <p><b><slot name="bpmnName"></slot></b></p>
+  <p><slot name="instructions"></slot></p>
+  <div><slot name="submit"></slot></div>
+`;
+
+
 class SpiffWorkflowRunner extends HTMLElement {
   static observedAttributes = ["apiKey"];
   apiKey = null;
@@ -65,6 +78,11 @@ class SpiffWorkflowRunner extends HTMLElement {
     if (tasksBySpec.ManualTask) {
       this.renderManualTask(tasksBySpec.ManualTask);
     }
+    else if (tasksBySpec.UserTask) {
+      this.renderUserTask(tasksBySpec.UserTask);
+    }
+
+    console.log(tasksBySpec);
   }
 
   renderManualTask(task) {
@@ -73,38 +91,65 @@ class SpiffWorkflowRunner extends HTMLElement {
     const taskSpec = task.task_spec;
     const templateId = this.getAttribute("manualTaskTemplateId");      
     const template = templateId ? document.getElementById(templateId) : null;
-  
+    
     if (template) {
       const content = template.content.cloneNode(true);
       this.elWorkflow.replaceChildren(content);
     } else {
-      this.elWorkflow.innerHTML = `
-        <p><b><slot name="bpmnName"></slot></b></p>
-        <p><slot name="instructions"></slot></p>
-        <div><slot name="completeButton"></slot></div>
-      `;
+      this.elWorkflow.innerHTML = manualTaskDefaultTemplateStr;
     }
 
     const name = document.createElement("span");
     name.slot = "bpmnName";
     name.innerText = taskSpec.bpmn_name;
-    this.appendChild(name);
 
     const instructions = document.createElement("span");
     instructions.slot = "instructions";
     instructions.innerText = taskSpec.extensions.instructionsForEndUser;
-    this.appendChild(instructions);
 
-    const completer = document.createElement("button");
-    completer.slot = "completeButton";
-    completer.innerText = "Complete";
-    completer.onclick = () => {
-      completer.disabled = true;
+    const submit = document.createElement("button");
+    submit.slot = "submit";
+    submit.innerText = "Submit";
+    submit.onclick = () => {
+      submit.disabled = true;
       this.runWorkflow({ completed_tasks: [{ id, data }]});
     }
-    this.appendChild(completer);
+    
+    this.replaceChildren(name, instructions, submit);
   }
   
+  renderUserTask(task) {
+    const id = task.id;
+    const data = {};
+    const taskSpec = task.task_spec;
+    const templateId = this.getAttribute("userTaskTemplateId");      
+    const template = templateId ? document.getElementById(templateId) : null;
+    
+    if (template) {
+      const content = template.content.cloneNode(true);
+      this.elWorkflow.replaceChildren(content);
+    } else {
+      this.elWorkflow.innerHTML = userTaskDefaultTemplateStr;
+    }
+
+    const name = document.createElement("span");
+    name.slot = "bpmnName";
+    name.innerText = taskSpec.bpmn_name;
+
+    const instructions = document.createElement("span");
+    instructions.slot = "instructions";
+    instructions.innerText = taskSpec.extensions.instructionsForEndUser;
+
+    const submit = document.createElement("button");
+    submit.slot = "submit";
+    submit.innerText = "Submit";
+    submit.onclick = () => {
+      submit.disabled = true;
+      this.runWorkflow({ completed_tasks: [{ id, data }]});
+    }
+    
+    this.replaceChildren(name, instructions, submit);
+  }
 
   initElements() {
     this.shadow.innerHTML = `
