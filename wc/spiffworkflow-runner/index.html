@@ -76,7 +76,7 @@
       </div>
       <br />
       <div>
-        <button onclick="customUserTaskSubmitHandler(this.parentElement.parentElement);">
+        <button onclick="customUserTaskSubmitHandler(this, this.parentElement.parentElement);">
           Custom Submit Button
 	</button>
       </div>
@@ -86,10 +86,11 @@
     
     <script type="module" src="/main.js"></script>
     <script language="javascript">
-      function customUserTaskSubmitHandler(elem) {
-        const pushups = [...elem.querySelectorAll('input[name="pushups"]')].find(({ checked }) => checked);
-        const thanos = [...elem.querySelectorAll('input[name="thanos"]')].find(({ checked }) => checked);
-        const bulletproof = [...elem.querySelectorAll('input[name="bulletproof"]')].find(({ checked }) => checked);
+      function customUserTaskSubmitHandler(btn, wf) {
+        const checked = (n) => [...wf.querySelectorAll(`input[name="${n}"]`)].find(({ checked }) => checked);
+        const pushups = checked("pushups");
+        const thanos = checked("thanos");
+        const bulletproof = checked("bulletproof");
 
 	if (!pushups || !thanos || !bulletproof) {
 	  alert("You must answer all the questions to prove your worth!");
@@ -102,9 +103,10 @@
 	  bulletproof: bulletproof.value == "true",
 	};
 
-	const e = new CustomEvent("taskCompleted", { detail: { data } });
-	elem.dispatchEvent(e);
-	console.log(elem);
+	const id = wf.getAttribute("pendingTaskId");
+	const e = new CustomEvent("taskCompleted", { detail: { id, data } });
+	wf.dispatchEvent(e);
+	console.log(wf);
       }
     </script>
   </body>

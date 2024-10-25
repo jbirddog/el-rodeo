@@ -115,6 +115,7 @@ class SpiffWorkflowRunner extends HTMLElement {
     }
     
     this.replaceChildren(name, instructions, submit);
+    this.elWorkflow.setAttribute("pendingTaskId", task.id);
   }
   
   renderUserTask(task) {
@@ -148,6 +149,7 @@ class SpiffWorkflowRunner extends HTMLElement {
     }
     
     this.replaceChildren(name, instructions, submit);
+    this.elWorkflow.setAttribute("pendingTaskId", task.id);
   }
 
   initElements() {
@@ -174,8 +176,8 @@ class SpiffWorkflowRunner extends HTMLElement {
     this.elWorkflow.replaceChildren(this.slotLoading);
 
     this.elWorkflow.addEventListener("taskCompleted", (e) => {
-      console.log(this.id);
       console.log(e.detail);
+      setTimeout(() => this.runWorkflow({ completed_tasks: [e.detail]}));
     }, false);
 
     this.slotComplete.setAttribute("name", "WorkflowComplete");
