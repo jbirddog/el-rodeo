@@ -2,13 +2,13 @@
 const manualTaskDefaultTemplateStr = `
   <p><b><slot name="bpmnName"></slot></b></p>
   <p><slot name="instructions"></slot></p>
-  <div><slot name="submit"></slot></div>
+  <div><slot name="actions"></slot></div>
 `;
 
 const userTaskDefaultTemplateStr = `
   <p><b><slot name="bpmnName"></slot></b></p>
   <p><slot name="instructions"></slot></p>
-  <div><slot name="submit"></slot></div>
+  <div><slot name="actions"></slot></div>
 `;
 
 
@@ -17,6 +17,7 @@ class SpiffWorkflowRunner extends HTMLElement {
   apiKey = null;
   completed = false;
   pendingTasks = [];
+  result = {};
   runner = 'http://localhost:8100';
   shadow = null;
   state = {};
@@ -55,10 +56,11 @@ class SpiffWorkflowRunner extends HTMLElement {
 
     const json = await resp.json();
 
-    this.status = json.status ?? 'error';
     this.completed = json.completed ?? false;
-    this.state = { state: json.state ?? {} };
     this.pendingTasks = json.pending_tasks ?? [];
+    this.result = json.result ?? {};
+    this.state = { state: json.state ?? {} };
+    this.status = json.status ?? 'error';
 
     if (this.completed) {
       this.renderCompletion();
@@ -68,25 +70,27 @@ class SpiffWorkflowRunner extends HTMLElement {
   }
 
   renderCompletion() {
-    this.elWorkflow.replaceChildren(this.slotComplete);
+    console.log(this.state);
+    this.elWorkflow.innerHTML = `
+      <p>This Workflow has been completed.</p>
+      <p>Result:</p>
+      <pre style="text-align: left;">${JSON.stringify(this.result, null, 2)}</pre>
+    `;
   }
 
   renderPendingTasks() {
+    const boundaryEvents = this.pendingTasks.filter(t => t.task_spec.typename === "BoundaryEvent");
     const tasksBySpec = this.pendingTasks.reduce((a, c) => ({[c.task_spec.typename]: c, ...a }), {})
 
     if (tasksBySpec.ManualTask) {
-      this.renderManualTask(tasksBySpec.ManualTask);
+      this.renderManualTask(tasksBySpec.ManualTask, boundaryEvents);
     }
     else if (tasksBySpec.UserTask) {
-      this.renderUserTask(tasksBySpec.UserTask);
-    }
-
-    if (tasksBySpec.BoundaryEvent) {
-      console.log(tasksBySpec);
+      this.renderUserTask(tasksBySpec.UserTask, boundaryEvents);
     }
   }
 
-  renderHumanTask(task, templateIdAttr, defaultTemplateStr) {
+  renderHumanTask(task, boundaryEvents, templateIdAttr, defaultTemplateStr) {
     const id = task.id;
     const data = {};
     const taskSpec = task.task_spec;
@@ -108,24 +112,37 @@ class SpiffWorkflowRunner extends HTMLElement {
     instructions.slot = "instructions";
     instructions.innerText = taskSpec.extensions.instructionsForEndUser;
 
+    const actions = document.createElement("span");
+    actions.slot = "actions";
+    
     const submit = document.createElement("button");
-    submit.slot = "submit";
     submit.innerText = "Submit";
     submit.onclick = () => {
       submit.disabled = true;
       this.runWorkflow({ completed_tasks: [{ id, data }]});
     }
+    actions.appendChild(submit);
+
+    boundaryEvents?.forEach(e  => {
+      const btn = document.createElement("button");
+      btn.innerText = e.task_spec.extensions.signalButtonLabel;
+      btn.onclick = () => {
+        btn.disabled = true;
+        this.runWorkflow({ completed_tasks: [{ id: e.id, data: {} }]});
+      }
+      actions.appendChild(btn);
+    });
     
-    this.replaceChildren(name, instructions, submit);
+    this.replaceChildren(name, instructions, actions);
     this.elWorkflow.setAttribute("pendingTaskId", task.id);
   }
 
-  renderManualTask(task) {
-    this.renderHumanTask(task, "manualTaskTemplateId", manualTaskDefaultTemplateStr);
+  renderManualTask(task, boundaryEvents) {
+    this.renderHumanTask(task, boundaryEvents, "manualTaskTemplateId", manualTaskDefaultTemplateStr);
   }
   
-  renderUserTask(task) {
-    this.renderHumanTask(task, "userTaskTemplateId", userTaskDefaultTemplateStr);
+  renderUserTask(task, boundaryEvents) {
+    this.renderHumanTask(task, boundaryEvents, "userTaskTemplateId", userTaskDefaultTemplateStr);
   }
 
   initElements() {
@@ -152,7 +169,6 @@ class SpiffWorkflowRunner extends HTMLElement {
     this.elWorkflow.replaceChildren(this.slotLoading);
 
     this.elWorkflow.addEventListener("taskCompleted", (e) => {
-      console.log(e.detail);
       setTimeout(() => this.runWorkflow({ completed_tasks: [e.detail]}));
     }, false);
 
