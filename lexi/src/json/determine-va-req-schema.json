@@ -1,0 +1,19 @@
+{
+  "title": "Virginia Requirement Check",
+  "description": "All new Virginia businesses are required to register with the Virginia Department of Taxation.  Additionally, registration with the Virginia Employment Commission and the Virginia State Corporation Commission may be required.  Answer the questions below to determine which additional registrations, if any, are required",
+  "type": "object",
+  "properties": {
+    "isVirginiaEmployees": {
+      "type": "boolean",
+      "title": "Virginia Employees?"
+    },
+    "isFictitiousName": {
+      "type": "boolean",
+      "title": "Fictitious Name?"
+    }
+  },
+  "required": [
+    "isVirginiaEmployees",
+    "isFictitiousName"
+  ]
+}
