@@ -1,0 +1,5 @@
+kind: wasmer.io/App.v0
+name: spiffworkflow-runner
+owner: jbirddog
+package: .
+app_id: da_KE4I8tXUko82

@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SpiffWorkflow Runner</title>
+  </head>
+  <body>
+    <div id="app">
+      <h1>&lt;spiffworkflow-runner /&gt;</h1>
+      <p>
+        In this demo we run two independent workflows in isolation on one page using the
+	<code>&lt;spiffworkflow-runner /&gt;</code> custom element. The second workflow
+	customizes the experience, the first does not.
+      </p>
+      <p><em>Note: Jinja, Markdown and LocalStorage are currently a WIP.</em></p>
+      <hr />
+      <br />
+      <h3>Workflow 1</h3>
+      Workflow to run:
+      <input
+        type="text"
+	id="newId"
+	value="0a9063f1-1a91-46a1-8263-828f99d54a00"
+	style="width: 22em"
+      />
+      <button onclick="updateWorkflow();">Change Workflow</button>
+      <spiffworkflow-runner
+        id="example-workflow"
+	apikey="0a9063f1-1a91-46a1-8263-828f99d54a00"
+      >
+      </spiffworkflow-runner>
+
+      <h3>Workflow 2</h3>
+      <em>Do you even know Chuck?</em>
+      <spiffworkflow-runner
+        id="chuck-workflow"
+	apikey="e5116459-c1d2-4dbe-aaea-7911a0c115bc"
+	manualTaskTemplateId="manualTaskTemplate1"
+	userTaskTemplateId="userTaskTemplate1"
+      >
+      </spiffworkflow-runner>
+    </div>
+    
+    <template id="manualTaskTemplate1">
+      <p>(This is a ManualTask)</p>
+      <div><slot name="actions"></slot></div>
+      <hr />
+      <tt style="color: orange;"><slot name="instructions"></slot></tt>
+      <marquee>
+        <h1 style="background: yellow; color: purple">
+        This BPMN task name is "<slot name="bpmnName"></slot>"</h1>
+      </marquee>
+    </template>
+    
+    <template id="userTaskTemplate1">
+      <p><slot name="bpmnName"></slot></p>
+      <hr />
+      <p style="color: white;"><slot name="instructions"></slot></p>
+      <div style="border: dotted 4px pink; text-align: left; padding: 1em;">
+      <p>
+        When Chuck Norris does a pushup, he’s pushing the Earth down.
+	<br />
+	<input type="radio" name="pushups" value="true" /> True
+	</br>
+	<input type="radio" name="pushups" value="false" /> False
+      </p>
+      <p>
+        Chuck Norris was given a bloody nose by Thanos the god like villain from the Avengers Movies
+	<br />
+	<input type="radio" name="thanos" value="true" /> True
+	</br>
+	<input type="radio" name="thanos" value="false" /> False
+      </p>
+      <p>
+        A bulletproof vest wears Chuck Norris for protection.
+	<br />
+	<input type="radio" name="bulletproof" value="true" /> True
+	</br>
+	<input type="radio" name="bulletproof" value="false" /> False
+      </p>
+      </div>
+      <br />
+      <div>
+        <button onclick="customUserTaskSubmitHandler(this, this.parentElement.parentElement);">
+          Custom Submit Button
+	</button>
+      </div>
+      <hr />
+      <p>(This is a UserTask)</p>
+    </template>
+    
+    <script type="module" src="/main.js"></script>
+    <script language="javascript">
+      function customUserTaskSubmitHandler(btn, wf) {
+        const checked = (n) => [...wf.querySelectorAll(`input[name="${n}"]`)].find(({ checked }) => checked);
+        const pushups = checked("pushups");
+        const thanos = checked("thanos");
+        const bulletproof = checked("bulletproof");
+
+	if (!pushups || !thanos || !bulletproof) {
+	  alert("You must answer all the questions to prove your worth!");
+	  return;
+	}
+
+	const data = {
+	  pushups: pushups.value == "true",
+	  thanos: thanos.value == "true",
+	  bulletproof: bulletproof.value == "true",
+	};
+
+	const id = wf.getAttribute("pendingTaskId");
+	const e = new CustomEvent("taskCompleted", { detail: { id, data } });
+	wf.dispatchEvent(e);
+	console.log(wf);
+      }
+
+      function updateWorkflow() {
+        const newId = document.getElementById("newId").value;
+	const wf = document.getElementById("example-workflow");
+        wf.setAttribute("apikey", newId);
+      }
+    </script>
+  </body>
+</html>

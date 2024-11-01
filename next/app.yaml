@@ -1,0 +1,5 @@
+name: trynext
+app_id: da_RjPIgtQUp9OK
+owner: jbirddog
+package: .
+kind: wasmer.io/App.v0

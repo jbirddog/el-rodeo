@@ -38,9 +38,15 @@ const login = async () => {
     });
 
     await sdk.init();
+    /*
     const sig = await sdk.connectAndSign({ msg: "Sign here" });
-
     alert(sig);
+    */
+
+    const num = await window.ethereum.request({ method: 'eth_blockNumber' });
+    alert(num);
+    console.log(num);
+    
 
 /*
 const addr = await window.ethereum.request({ method: 'eth_requestAccounts' });
