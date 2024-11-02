@@ -6,27 +6,14 @@ const apiKey = "214741df-d29f-43e0-bc05-9c03893e58fd";
 
 import determineCvilleReqSchema from './json/determine-cville-req-schema.json';
 import determineEinSchema from './json/determine-ein-schema.json';
-import determineEinUiDchema from './json/determine-ein-uischema.json';
-import determineNewEinDchema from './json/determine-new-ein-schema.json';
-
-/*
-determine-new-ein-uischema.json
-determine-va-req-schema.json
-determine-va-req-uischema.json
-how-to-apply-schema.json
-how-to-apply-uischema.json
-need-ein-uischema.json
-*/
-
-/*
-import { SpiffWorkflowRunner } from './SpiffWorkflowRunner.tsx'
-
-import hoursSummarySchema from '../json/hours-summary-schema.json'
-import hoursSummaryUiSchema from '../json/hours-summary-uischema.json'
-
-import runningTimeSchema from '../json/running_time-schema.json'
-import runningTimeUiSchema from '../json/running_time-uischema.json'
-*/
+import determineEinUiSchema from './json/determine-ein-uischema.json';
+import determineNewEinSchema from './json/determine-new-ein-schema.json';
+import determineNewEinUiSchema from './json/determine-new-ein-uischema.json';
+import determineVaReqSchema from './json/determine-va-req-schema.json';
+import determineVaReqUiSchema from './json/determine-va-req-uischema.json';
+import howToApplySchema from './json/how-to-apply-schema.json';
+import howToApplyUiSchema from './json/how-to-apply-uischema.json';
+import needEinUischema from './json/need-ein-uischema.json';
 
 function App() {
   return (
@@ -40,10 +27,16 @@ function App() {
 	  <dt><h3>Start a Company in Virginia</h3></dt>
 	  <dd>
             <SpiffWorkflowRunner apiKey={apiKey} schemaMap={{
-              "hours-summary-schema.json": hoursSummarySchema,
-              "hours-summary-uischema.json": hoursSummaryUiSchema,
-              "running_time-schema.json": runningTimeSchema,
-              "running_time-uischema.json": runningTimeUiSchema,
+              "determine-cville-req-schema.json": determineCvilleReqSchema,
+	      "determine-ein-schema.json": determineEinSchema,
+	      "determine-ein-uischema.json": determineEinUiSchema,
+	      "determine-new-ein-schema.json": determineNewEinSchema,
+	      "determine-new-ein-uischema.json": determineNewEinUiSchema,
+	      "determine-va-req-schema.json": determineVaReqSchema,
+	      "determine-va-req-uischema.json": determineVaReqUiSchema,
+	      "how-to-apply-schema.json": howToApplySchema,
+	      "how-to-apply-uischema.json": howToApplyUiSchema,
+	      "need-ein-uischema.json": needEinUischema,
             }} />
 	  </dd>
 	</dl>
