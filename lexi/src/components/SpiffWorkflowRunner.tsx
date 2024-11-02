@@ -83,8 +83,7 @@ export const SpiffWorkflowRunner = ({ apiKey, schemaMap }: { apiKey: string, sch
       <div>Loading...</div>
     ) : completed === true ? (
       <div>
-        <h3>Thank you for your time.</h3>
-        <p>Pun intended.</p>
+        <h3>Workflow Complete!</h3>
         <button
           onClick={() => {
             setWorkflowState({})
