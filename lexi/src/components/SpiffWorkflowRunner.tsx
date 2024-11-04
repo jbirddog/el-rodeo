@@ -10,7 +10,14 @@ interface keyable {
 //const remoteRunner = "https://myapi.spiff.works"
 const remoteRunner = "http://localhost:8100"
 
-const startParams = { start: { process_id: "Process_start_a_company_ow48of2" } }
+const startParams = {
+  start: {
+    process_id: "Process_start_a_company_ow48of2",
+    data: {
+      "ein_status": "I do not have and EIN and I am sure that I need one",
+    },
+  }
+}
 
 export const SpiffWorkflowRunner = ({ apiKey, schemaMap }: { apiKey: string, schemaMap: keyable }) => {
   const [completed, setCompleted] = useState(false)

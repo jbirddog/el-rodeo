@@ -13,7 +13,8 @@ import determineVaReqSchema from './json/determine-va-req-schema.json';
 import determineVaReqUiSchema from './json/determine-va-req-uischema.json';
 import howToApplySchema from './json/how-to-apply-schema.json';
 import howToApplyUiSchema from './json/how-to-apply-uischema.json';
-import needEinUischema from './json/need-ein-uischema.json';
+import needEinSchema from './json/need-ein-schema.json';
+import needEinUiSchema from './json/need-ein-uischema.json';
 import vaTaxRegisterMethodSchema from './json/va-tax-register-method-schema.json';
 import vaTaxRegisterMethodUiSchema from './json/va-tax-register-method-uischema.json';
 
@@ -39,7 +40,8 @@ function App() {
 	      "determine-va-req-uischema.json": determineVaReqUiSchema,
 	      "how-to-apply-schema.json": howToApplySchema,
 	      "how-to-apply-uischema.json": howToApplyUiSchema,
-	      "need-ein-uischema.json": needEinUischema,
+	      "need-ein-schema.json": needEinSchema,
+	      "need-ein-uischema.json": needEinUiSchema,
 	      "va-tax-register-method-schema.json": vaTaxRegisterMethodSchema,
 	      "va-tax-register-method-uischema.json": vaTaxRegisterMethodUiSchema,
             }} />
