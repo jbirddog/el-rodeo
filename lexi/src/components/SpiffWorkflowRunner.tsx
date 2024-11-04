@@ -7,8 +7,8 @@ interface keyable {
   [key: string]: any; // eslint-disable-line
 }
 
-//const remoteRunner = "https://myapi.spiff.works"
-const remoteRunner = "http://localhost:8100"
+//const remoteRunner = "http://localhost:8100"
+const remoteRunner = "https://myapi.spiff.works"
 
 const startParams = {
   start: {
