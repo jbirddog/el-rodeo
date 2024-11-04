@@ -1,0 +1,5 @@
+kind: wasmer.io/App.v0
+name: lexi
+owner: jbirddog
+package: .
+app_id: da_KgYIZt9UjamR
