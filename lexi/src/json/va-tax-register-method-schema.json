@@ -1,0 +1,19 @@
+{
+  "title": "Virginia Department of Taxation",
+  "description": "All new businesses are required to register with us online, if possible.  If you're unable to register online, you'll need to fill out and mail a Form R-1 instead.",
+  "type": "object",
+  "required": [
+    "vdtMethod"
+  ],
+  "properties": {
+    "vdtMethod": {
+      "type": "string",
+      "title": "Registration Method",
+      "default": "Complete and Submit Online",
+      "enum": [
+        "Complete and Submit Online",
+        "Complete and Mail of Fax Required Forms"
+      ]
+    }
+  }
+}

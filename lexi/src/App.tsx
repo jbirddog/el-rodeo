@@ -1,10 +1,10 @@
-import { useState } from 'react'
 import './App.css'
 import { SpiffWorkflowRunner } from './components/SpiffWorkflowRunner.tsx'
 
-const apiKey = "214741df-d29f-43e0-bc05-9c03893e58fd";
+const apiKey = "67cf662f-a83f-4712-be82-a4318294c2c4";
 
 import determineCvilleReqSchema from './json/determine-cville-req-schema.json';
+import determineCvilleReqUiSchema from './json/determine-cville-req-uischema.json';
 import determineEinSchema from './json/determine-ein-schema.json';
 import determineEinUiSchema from './json/determine-ein-uischema.json';
 import determineNewEinSchema from './json/determine-new-ein-schema.json';
@@ -14,6 +14,8 @@ import determineVaReqUiSchema from './json/determine-va-req-uischema.json';
 import howToApplySchema from './json/how-to-apply-schema.json';
 import howToApplyUiSchema from './json/how-to-apply-uischema.json';
 import needEinUischema from './json/need-ein-uischema.json';
+import vaTaxRegisterMethodSchema from './json/va-tax-register-method-schema.json';
+import vaTaxRegisterMethodUiSchema from './json/va-tax-register-method-uischema.json';
 
 function App() {
   return (
@@ -28,6 +30,7 @@ function App() {
 	  <dd>
             <SpiffWorkflowRunner apiKey={apiKey} schemaMap={{
               "determine-cville-req-schema.json": determineCvilleReqSchema,
+              "determine-cville-req-uischema.json": determineCvilleReqUiSchema,
 	      "determine-ein-schema.json": determineEinSchema,
 	      "determine-ein-uischema.json": determineEinUiSchema,
 	      "determine-new-ein-schema.json": determineNewEinSchema,
@@ -37,6 +40,8 @@ function App() {
 	      "how-to-apply-schema.json": howToApplySchema,
 	      "how-to-apply-uischema.json": howToApplyUiSchema,
 	      "need-ein-uischema.json": needEinUischema,
+	      "va-tax-register-method-schema.json": vaTaxRegisterMethodSchema,
+	      "va-tax-register-method-uischema.json": vaTaxRegisterMethodUiSchema,
             }} />
 	  </dd>
 	</dl>

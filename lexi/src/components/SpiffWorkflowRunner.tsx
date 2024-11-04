@@ -7,8 +7,10 @@ interface keyable {
   [key: string]: any; // eslint-disable-line
 }
 
-const remoteRunner = "https://myapi.spiff.works"
-//const remoteRunner = "http://localhost:8100"
+//const remoteRunner = "https://myapi.spiff.works"
+const remoteRunner = "http://localhost:8100"
+
+const startParams = { start: { process_id: "Process_start_a_company_ow48of2" } }
 
 export const SpiffWorkflowRunner = ({ apiKey, schemaMap }: { apiKey: string, schemaMap: keyable }) => {
   const [completed, setCompleted] = useState(false)
@@ -37,7 +39,7 @@ export const SpiffWorkflowRunner = ({ apiKey, schemaMap }: { apiKey: string, sch
   };
 
   useEffect(() => {
-    runWorkflow({});
+    runWorkflow(startParams);
   }, []); // eslint-disable-line
 
   const completeTask = (id: string, data: keyable) => {
@@ -78,7 +80,7 @@ export const SpiffWorkflowRunner = ({ apiKey, schemaMap }: { apiKey: string, sch
     );
   
   return <div className="card">
-    {error ? <div className="error">{error}</div>
+    {error ? <div className="error">Error: {error}</div>
     :completed === false && pendingTasks.length === 0 ? (
       <div>Loading...</div>
     ) : completed === true ? (
@@ -87,7 +89,7 @@ export const SpiffWorkflowRunner = ({ apiKey, schemaMap }: { apiKey: string, sch
         <button
           onClick={() => {
             setWorkflowState({})
-            runWorkflow({})
+            runWorkflow(startParams)
           }}
           data-testid="clear-data"
 	>
