@@ -1,0 +1,19 @@
+{
+  "title": "Charlottesville Requirement Check",
+  "description": "Answering the questons below will determine which forms you will need to submit to the City of Charlottesville",
+  "type": "object",
+  "properties": {
+    "isHome": {
+      "type": "boolean",
+      "title": "Home Business?"
+    },
+    "isSign": {
+      "type": "boolean",
+      "title": "Business Sign?"
+    }
+  },
+  "required": [
+    "isHome",
+    "isSign"
+  ]
+}

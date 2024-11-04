@@ -1,0 +1,22 @@
+{
+  "title": "Do I Need a New EIN",
+  "description": "Depending on the purpose of your new business or endeavor, there are situations where a new EIN is required.  If yours falls under one of the categories below, select it for more information",
+  "type": "object",
+  "required": [
+    "new_ein_category"
+  ],
+  "properties": {
+    "new_ein_category": {
+      "type": "string",
+      "title": "New business or endeavor related to..",
+      "enum": [
+        "Sole Proprietor",
+        "Corporation",
+        "Partnership",
+        "Estate",
+        "Trust",
+        "Limited Liability Company"
+      ]
+    }
+  }
+}

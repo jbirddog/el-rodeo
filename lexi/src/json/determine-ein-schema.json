@@ -1,0 +1,53 @@
+{
+    "title": "Employee Identification Number",
+    "description": "Every organization must have an employer identification number (EIN), even if it will not have employees. The EIN is a unique number that identifies the organization to the Internal Revenue Service.",
+    "type": "object",
+    "properties": {
+        "ein_status": {
+            "type": "string",
+            "title": "Apply for EIN?",
+            "default": "Complete and Submit Online",
+            "enum": [
+                "I do not have and EIN and I am sure that I need one",
+                "I do not have and EIN and I am sure that I do not need one",
+                "I do not have and EIN and I am not sure if I need one",
+                "I have an EIN and I am sure that I need a new one",
+                "I have an EIN and I am sure that I do not need a new one",
+                "I have an EIN and I am not sure if I need a new one"
+            ]
+        }
+    },
+    "allOf": [
+        {
+            "if": {
+                "properties": {
+                    "ein_status": {
+                        "enum": [
+                            "I need an EIN",
+                            "I have an EIN and am sure I do not need a new one"
+                        ]
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "ein_apply_method": {
+                    "type": "string",
+                    "title": "Registration Method",
+                    "default": "Online",
+                    "enum": [
+                        "Online",
+                        "Mail or Fax"
+                    ]
+                },
+                "required": [
+                    "ein_apply_method"
+                ]
+                }
+            }
+        }
+    ],
+    "required": [
+      "ein_status"
+    ]
+}

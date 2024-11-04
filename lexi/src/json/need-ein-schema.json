@@ -1,0 +1,17 @@
+{
+  "title": "Employer Identification Number",
+  "type": "object",
+  "required": [
+    "ein_status_updated"
+  ],
+  "properties": {
+    "ein_status_updated": {
+      "type": "string",
+      "title": "Need an EIN?",
+      "enum": [
+        "I do need an EIN",
+        "I do not need an EIN"
+      ]
+    }
+  }
+}

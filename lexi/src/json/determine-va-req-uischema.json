@@ -1,0 +1,10 @@
+{
+  "isVirginiaEmployees": {
+    "ui:widget": "radio",
+    "ui:description": "New businesses that have paid or will pay wages to employees working in Virginia and meet certain employer qualifications are required to register with the Virginia Employment Commission."
+  },
+  "isFictitiousName": {
+    "ui:widget": "radio",
+    "ui:description": "Are you planning on doing business under a Fictitious Name?  If so, registration with the State Corporation Commission is required for any business that does not use its legal, registered name as part of its business name."
+  }
+}

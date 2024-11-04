@@ -1,0 +1,10 @@
+{
+  "isHome": {
+    "ui:widget": "radio",
+    "ui:description": "If conducting business from your home, you will need a Home Occupation Provisional Use Permit."
+  },
+  "isSign": {
+    "ui:widget": "radio",
+    "ui:description": "If erecting a sign at your business location, you will need a Sign Permit."
+  }
+}

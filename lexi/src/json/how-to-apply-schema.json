@@ -1,0 +1,20 @@
+{
+    "title": "EIN Application Method",
+    "description": "You can apply for an EIN online, by mail, or by fax. You may also apply by telephone if your organization was formed outside the U.S. or U.S. territories",
+    "type": "object",
+    "properties": {
+        "ein_application_method": {
+            "type": "string",
+            "title": "Application Method",
+            "default": "Complete and Submit Online",
+            "enum": [
+                "Complete and Submit Online",
+                "Download, Complete and Mail or Fax Form",
+                "Phone"
+            ]
+        }
+    },
+    "required": [
+        "ein_application_method"
+    ]
+}
